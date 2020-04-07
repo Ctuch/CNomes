@@ -43,6 +43,7 @@ public class MenuPanel extends JPanel {
         JButton specialActionButton = new JButton("Turn Black");
         JButton displayButton = new JButton("Load New Word list");
         JButton helpButton = new JButton("Reset Board");
+        JButton switchView = new JButton("Switch View");
         ArrayList<JButton> menuButtons = new ArrayList<>();
         menuButtons.add(addButton);
         menuButtons.add(moveButton);
@@ -50,6 +51,7 @@ public class MenuPanel extends JPanel {
         menuButtons.add(specialActionButton);
         menuButtons.add(displayButton);
         menuButtons.add(helpButton);
+        menuButtons.add(switchView);
 
         addActionListener(menuButtons, listener);
 

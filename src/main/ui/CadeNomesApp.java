@@ -48,6 +48,8 @@ public class CadeNomesApp extends JFrame {
                 gamePanel.loadWords();
             } else if (command.equalsIgnoreCase("Reset Board")) {
                 gamePanel.setReset(true);
+            } else if (command.equalsIgnoreCase("Switch View")) {
+                gamePanel.setMasterView();
             }
             gamePanel.repaint();
         }

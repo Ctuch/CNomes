@@ -22,16 +22,22 @@ public class GamePanel extends JPanel {
 
     private int selectedSquare;
     private ArrayList<Location> locations;
+    private ArrayList<Location> masterClues;
 
     private Boolean reset;
+    private Boolean masterView;
     private ArrayList<String> words;
+    private boolean inLocations;
 
     public GamePanel(int width, int height) {
         setPreferredSize(new Dimension((width * 3) / 4, height));
         setBackground(Color.WHITE);
         locations = new ArrayList<>();
+        masterClues = new ArrayList<>();
         selectedSquare = -1;
         reset = true;
+        masterView = true;
+        inLocations = false;
         loadWords();
         addMouseControl();
     }
@@ -44,6 +50,12 @@ public class GamePanel extends JPanel {
                 g.setColor(Color.LIGHT_GRAY);
                 g.fillRect(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER, C_WIDTH, C_HEIGHT);
                 locations.add(new Location(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER));
+                if (masterView) {
+                    masterClues.add(new Location(locations.get(currentPos).getxPos(), locations.get(currentPos).getyPos() + C_HEIGHT));
+                    masterClues.get(currentPos).setColor(new Color(236, 236, 236));
+                    g.setColor(masterClues.get(currentPos).getColor());
+                    drawMasterClue(i, j, g);
+                }
                 if (!(words == null)) {
                     g.setColor(Color.BLACK);
                     //TODO: center words
@@ -52,6 +64,12 @@ public class GamePanel extends JPanel {
             }
         }
         reset = false;
+        masterView = false;
+    }
+
+    private void drawMasterClue(int colX, int rowY, Graphics g) {
+        g.fillRect(colX * C_X_MULTIPLIER, rowY * C_Y_MULTIPLIER + C_HEIGHT,
+                C_WIDTH, 10);
     }
 
     @Override
@@ -72,8 +90,11 @@ public class GamePanel extends JPanel {
                 g.setColor(locations.get(currentPos).getColor());
                 g.fillRect(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER, C_WIDTH, C_HEIGHT);
                 locations.get(currentPos).setPos(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER);
-
-                if (!(words == null)) {
+                if (masterView) {
+                    g.setColor(masterClues.get(currentPos).getColor());
+                    drawMasterClue(i, j, g);
+                }
+                if (!(words == null) && locations.get(currentPos).getColor() == Color.LIGHT_GRAY) {
                     g.setColor(Color.BLACK);
                     //TODO: center words
                     g.drawString(words.get(currentPos), i * C_X_MULTIPLIER + TEXT_HORIZ_SPACE, j * C_Y_MULTIPLIER + TEXT_VERT_SPACE);
@@ -94,7 +115,12 @@ public class GamePanel extends JPanel {
 
     public void changeColor(Color color) {
         if (selectedSquare != -1) {
-            locations.get(selectedSquare).setColor(color);
+            if (inLocations) {
+                locations.get(selectedSquare).setColor(color);
+            } else {
+                System.out.println("Selected square was" + selectedSquare);
+                masterClues.get(selectedSquare).setColor(color);
+            }
         }
     }
 
@@ -103,32 +129,42 @@ public class GamePanel extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                updateSelectedCard(e.getX(), e.getY());
+                if (updateSelectedCard(e.getX(), e.getY(), locations, C_HEIGHT)) {
+                    inLocations = true;
+                } else if (updateSelectedCard(e.getX(), e.getY(), masterClues, 10)) {
+                    inLocations = false;
+                }
+
             }
         });
     }
 
-    private void updateSelectedCard(int x, int y) {
-        for (int i = 0; i < locations.size(); i++) {
-            if (isInSpace(x, y, locations.get(i).getxPos(), locations.get(i).getyPos())) {
+    private boolean updateSelectedCard(int x, int y, ArrayList<Location> locs, int height) {
+        for (int i = 0; i < locs.size(); i++) {
+            if (isInSpace(x, y, locs.get(i).getxPos(), locs.get(i).getyPos(), height)) {
                 selectedSquare = i;
                 System.out.println("selected square is " + i);
-                return;
+                System.out.println("On a location: " + (height == C_HEIGHT));
+                return true;
             }
         }
         System.out.println("No square selected");
         selectedSquare = -1;
+        return false;
     }
 
     //EFFECTS: returns true if the mouse clicks within the square of the person
-    public boolean isInSpace(int mouseX, int mouseY, int locationX, int locationY) {
+    public boolean isInSpace(int mouseX, int mouseY, int locationX, int locationY, int height) {
         int differenceX = mouseX - locationX;
         int differenceY = mouseY - locationY;
-        return differenceX <= 100 && differenceX >= 0 && differenceY <= 50 && differenceY >= 0;
+        return differenceX <= 100 && differenceX >= 0 && differenceY <= height && differenceY >= 0;
     }
 
     public void setReset(Boolean reset) {
         this.reset = reset;
     }
 
+    public void setMasterView() {
+        this.masterView = !this.masterView;
+    }
 }
