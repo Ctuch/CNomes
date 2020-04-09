@@ -161,6 +161,7 @@ public class GamePanel extends JPanel {
     }
 
     public void setReset(Boolean reset) {
+        this.selectedSquare = -1;
         this.reset = reset;
     }
 
