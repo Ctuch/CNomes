@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 public class CadeNomesApp extends JFrame {
 
     GamePanel gamePanel;
-    MenuPanel menuPanel;
+    GameMenuPanel gameMenuPanel;
     StartPanel startPanel;
 
     public CadeNomesApp() {
@@ -16,12 +16,12 @@ public class CadeNomesApp extends JFrame {
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(800, 800));
         gamePanel = new GamePanel(this.getWidth(), this.getHeight());
-        menuPanel = new MenuPanel(new MenuButtonActionListener(), this.getWidth());
+        gameMenuPanel = new GameMenuPanel(new MenuButtonActionListener(), this.getWidth());
         startPanel = new StartPanel(new StartButtonActionListener(), this.getWidth(), this.getHeight());
 
 
         add(gamePanel);
-        add(menuPanel, BorderLayout.SOUTH);
+        add(gameMenuPanel, BorderLayout.SOUTH);
         add(startPanel, BorderLayout.WEST);
         revealGame(false);
         pack();
@@ -32,7 +32,7 @@ public class CadeNomesApp extends JFrame {
     private void revealGame(boolean reveal) {
         startPanel.setVisible(!reveal);
         gamePanel.setVisible(reveal);
-        menuPanel.setVisible(reveal);
+        gameMenuPanel.setVisible(reveal);
     }
 
     private void centerOnScreen() {

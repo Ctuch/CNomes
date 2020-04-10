@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class StartPanel extends JPanel {
+public class StartPanel extends MenuPanel {
 
     public StartPanel(ActionListener listener, int width, int height) {
         setPreferredSize(new Dimension(width, height));
@@ -13,25 +13,6 @@ public class StartPanel extends JPanel {
         setBackground(Color.ORANGE);
         createMenuLabel("Start Menu");
         createMenuButtons(listener);
-    }
-
-    //MODIFIES: this
-    //EFFECTS: creates a menu label with text to display on the panel
-    protected void createMenuLabel(String text) {
-        JLabel mainMenu = new JLabel(text);
-        mainMenu.setPreferredSize(new Dimension(800,
-                100));
-        mainMenu.setForeground(Color.WHITE);
-        mainMenu.setHorizontalAlignment(JLabel.CENTER);
-        add(mainMenu);
-    }
-
-    //MODIFIES: this
-    //EFFECTS: adds buttons to this
-    private void createMenuButtons(ArrayList<JButton> buttons) {
-        for (JButton button : buttons) {
-            add(button);
-        }
     }
 
     private void createMenuButtons(ActionListener listener) {
@@ -44,18 +25,5 @@ public class StartPanel extends JPanel {
         addActionListener(startButtons, listener);
 
         createMenuButtons(startButtons);
-    }
-
-    /**
-     * @param buttons
-     * @param listener
-     */
-    /*
-     * @effects: adds the ActionListener listener to each button
-     */
-    protected void addActionListener(ArrayList<JButton> buttons, ActionListener listener) {
-        for (JButton button : buttons) {
-            button.addActionListener(listener);
-        }
     }
 }
