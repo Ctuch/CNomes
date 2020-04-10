@@ -16,7 +16,7 @@ public class GamePanel extends JPanel {
     private final static int C_WIDTH = 100;
     private final static int C_X_MULTIPLIER = C_WIDTH + 10;
     private final static int C_Y_MULTIPLIER = C_HEIGHT + 10;
-    private final static int TEXT_HORIZ_SPACE = C_WIDTH / 10;
+    private final static int TEXT_HORIZ_SPACE = C_WIDTH / 2;
     private final static int TEXT_VERT_SPACE = C_Y_MULTIPLIER / 2;
 
 
@@ -43,6 +43,7 @@ public class GamePanel extends JPanel {
     }
 
     private void loadDefaultBoard(Graphics g) {
+        g.setFont(g.getFont().deriveFont(Font.PLAIN, 12));
         locations.clear();
         for (int i = 1; i <= 5; i++) {
             for (int j = 1; j <= 5; j++) {
@@ -59,7 +60,7 @@ public class GamePanel extends JPanel {
                 if (!(words == null)) {
                     g.setColor(Color.BLACK);
                     //TODO: center words
-                    g.drawString(words.get(currentPos), i * C_X_MULTIPLIER + TEXT_HORIZ_SPACE, j * C_Y_MULTIPLIER + TEXT_VERT_SPACE);
+                    g.drawString(words.get(currentPos), i * C_X_MULTIPLIER + TEXT_HORIZ_SPACE - words.get(currentPos).length()*12, j * C_Y_MULTIPLIER + TEXT_VERT_SPACE);
                 }
             }
         }
@@ -83,6 +84,7 @@ public class GamePanel extends JPanel {
     }
 
     private void drawBoard(Graphics g) {
+        g.setFont(g.getFont().deriveFont(Font.PLAIN, 12));
         for (int i = 1; i <= 5; i++) {
             for (int j = 1; j <= 5; j++) {
 
@@ -96,8 +98,9 @@ public class GamePanel extends JPanel {
                 }
                 if (!(words == null) && locations.get(currentPos).getColor() == Color.LIGHT_GRAY) {
                     g.setColor(Color.BLACK);
-                    //TODO: center words
-                    g.drawString(words.get(currentPos), i * C_X_MULTIPLIER + TEXT_HORIZ_SPACE, j * C_Y_MULTIPLIER + TEXT_VERT_SPACE);
+                    //TODO: fix centering of words
+                    g.drawString(words.get(currentPos), i * C_X_MULTIPLIER + TEXT_HORIZ_SPACE - words.get(currentPos).length()*4,
+                            j * C_Y_MULTIPLIER + TEXT_VERT_SPACE);
                 }
             }
         }
