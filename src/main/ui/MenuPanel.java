@@ -57,7 +57,14 @@ public class MenuPanel extends JPanel {
 
         createMenuButtons(menuButtons);
     }
-    // EFFECTS: adds the ActionListener listener to each button
+
+    /**
+     * @param buttons
+     * @param listener
+     */
+    /*
+     * @effects: adds the ActionListener listener to each button
+     */
     protected void addActionListener(ArrayList<JButton> buttons, ActionListener listener) {
         for (JButton button : buttons) {
             button.addActionListener(listener);
