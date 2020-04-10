@@ -15,6 +15,12 @@ public class Location {
         color = Color.LIGHT_GRAY;
     }
 
+    public Location(int xPos, int yPos, Color color) {
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.color = color;
+    }
+
     public void setPos(int xPos, int yPos) {
         this.xPos = xPos;
         this.yPos = yPos;

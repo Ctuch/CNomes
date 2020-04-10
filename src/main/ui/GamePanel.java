@@ -18,6 +18,7 @@ public class GamePanel extends JPanel {
     private final static int C_Y_MULTIPLIER = C_HEIGHT + 10;
     private final static int TEXT_HORIZ_SPACE = C_WIDTH / 2;
     private final static int TEXT_VERT_SPACE = C_Y_MULTIPLIER / 2;
+    private final static Color MASTER_COLOR = new Color(236, 236, 236);
 
 
     private int selectedSquare;
@@ -42,37 +43,6 @@ public class GamePanel extends JPanel {
         addMouseControl();
     }
 
-    private void loadDefaultBoard(Graphics g) {
-        g.setFont(g.getFont().deriveFont(Font.PLAIN, 12));
-        locations.clear();
-        for (int i = 1; i <= 5; i++) {
-            for (int j = 1; j <= 5; j++) {
-                int currentPos = (i - 1) * 5 + j - 1;
-                g.setColor(Color.LIGHT_GRAY);
-                g.fillRect(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER, C_WIDTH, C_HEIGHT);
-                locations.add(new Location(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER));
-                if (masterView) {
-                    masterClues.add(new Location(locations.get(currentPos).getxPos(), locations.get(currentPos).getyPos() + C_HEIGHT));
-                    masterClues.get(currentPos).setColor(new Color(236, 236, 236));
-                    g.setColor(masterClues.get(currentPos).getColor());
-                    drawMasterClue(i, j, g);
-                }
-                if (!(words == null)) {
-                    g.setColor(Color.BLACK);
-                    //TODO: center words
-                    g.drawString(words.get(currentPos), i * C_X_MULTIPLIER + TEXT_HORIZ_SPACE - words.get(currentPos).length()*12, j * C_Y_MULTIPLIER + TEXT_VERT_SPACE);
-                }
-            }
-        }
-        reset = false;
-        masterView = false;
-    }
-
-    private void drawMasterClue(int colX, int rowY, Graphics g) {
-        g.fillRect(colX * C_X_MULTIPLIER, rowY * C_Y_MULTIPLIER + C_HEIGHT,
-                C_WIDTH, 10);
-    }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -87,29 +57,67 @@ public class GamePanel extends JPanel {
         g.setFont(g.getFont().deriveFont(Font.PLAIN, 12));
         for (int i = 1; i <= 5; i++) {
             for (int j = 1; j <= 5; j++) {
-
-                int currentPos = (i - 1) * 5 + j - 1;
-                g.setColor(locations.get(currentPos).getColor());
-                g.fillRect(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER, C_WIDTH, C_HEIGHT);
-                locations.get(currentPos).setPos(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER);
+                int currentPos = getCurrentPos(i, j);
+                drawTile(i, j, g, currentPos);
                 if (masterView) {
-                    g.setColor(masterClues.get(currentPos).getColor());
-                    drawMasterClue(i, j, g);
+                    drawMasterClue(i, j, g, currentPos);
                 }
                 if (!(words == null) && locations.get(currentPos).getColor() == Color.LIGHT_GRAY) {
-                    g.setColor(Color.BLACK);
-                    //TODO: fix centering of words
-                    g.drawString(words.get(currentPos), i * C_X_MULTIPLIER + TEXT_HORIZ_SPACE - words.get(currentPos).length()*4,
-                            j * C_Y_MULTIPLIER + TEXT_VERT_SPACE);
+                    writeWord(words.get(currentPos), i, j, g);
                 }
             }
         }
     }
 
+    private void loadDefaultBoard(Graphics g) {
+        g.setFont(g.getFont().deriveFont(Font.PLAIN, 12));
+        locations.clear();
+        for (int i = 1; i <= 5; i++) {
+            for (int j = 1; j <= 5; j++) {
+                int currentPos = getCurrentPos(i, j);
+                locations.add(new Location(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER));
+                drawTile(i, j, g, currentPos);
+                if (masterView) {
+                    masterClues.add(new Location(locations.get(currentPos).getxPos(),
+                            locations.get(currentPos).getyPos() + C_HEIGHT, MASTER_COLOR));
+                    drawMasterClue(i, j, g, currentPos);
+                }
+                if (!(words == null)) {
+                    writeWord(words.get(currentPos), i, j, g);
+                }
+            }
+        }
+        reset = false;
+        masterView = false;
+    }
+
+    private int getCurrentPos(int i, int j) {
+        return (i - 1) * 5 + j - 1;
+    }
+
+    private void drawTile(int i, int j, Graphics g, int currentPos) {
+        g.setColor(locations.get(currentPos).getColor());
+        g.fillRect(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER, C_WIDTH, C_HEIGHT);
+    }
+
+    private void drawMasterClue(int i, int j, Graphics g, int currentPos) {
+        g.setColor(masterClues.get(currentPos).getColor());
+        g.fillRect(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER + C_HEIGHT,
+                C_WIDTH, 10);
+    }
+
+    private void writeWord(String word, int i, int j, Graphics g) {
+        g.setColor(Color.BLACK);
+        //TODO: fix centering of words
+        g.drawString(word, i * C_X_MULTIPLIER + TEXT_HORIZ_SPACE - word.length() * 4,
+                j * C_Y_MULTIPLIER + TEXT_VERT_SPACE);
+    }
+
+
     public void loadWords() {
         try {
             WordList wordList = new WordList();
-            words =  wordList.getWords();
+            words = wordList.getWords();
         } catch (IOException e) {
             System.out.println("I'm sorry please try again");
             words = null;
