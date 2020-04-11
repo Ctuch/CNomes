@@ -19,6 +19,7 @@ public class GamePanel extends JPanel {
     private final static int TEXT_HORIZ_SPACE = C_WIDTH / 2;
     private final static int TEXT_VERT_SPACE = C_Y_MULTIPLIER / 2;
     private final static Color MASTER_COLOR = new Color(236, 236, 236);
+    private final static int MAX_TILES_FIRST = 9;
 
 
     private int selectedSquare;
@@ -29,6 +30,9 @@ public class GamePanel extends JPanel {
     private Boolean masterView;
     private ArrayList<String> words;
     private boolean inLocations;
+    private int redCount;
+    private int blueCount;
+    private boolean assassinTriggered;
 
     public GamePanel(int width, int height) {
         setPreferredSize(new Dimension((width * 3) / 4, height));
@@ -41,6 +45,9 @@ public class GamePanel extends JPanel {
         inLocations = false;
         loadWords();
         addMouseControl();
+        redCount = 0;
+        blueCount = 0;
+        assassinTriggered = false;
     }
 
     @Override
@@ -128,10 +135,21 @@ public class GamePanel extends JPanel {
         if (selectedSquare != -1) {
             if (inLocations) {
                 locations.get(selectedSquare).setColor(color);
+                updateCounts(color);
             } else {
                 System.out.println("Selected square was" + selectedSquare);
                 masterClues.get(selectedSquare).setColor(color);
             }
+        }
+    }
+
+    private void updateCounts(Color color) {
+        if (color.equals(Color.RED)) {
+            redCount++;
+        } else if (color.equals(Color.BLUE)) {
+            blueCount++;
+        } else if (color.equals(Color.BLACK)) {
+            assassinTriggered = true;
         }
     }
 
@@ -174,6 +192,42 @@ public class GamePanel extends JPanel {
     public void setReset(Boolean reset) {
         this.selectedSquare = -1;
         this.reset = reset;
+    }
+
+    public String isGameOver() {
+        String gameOverMessage = "";
+        boolean isRed = GameMenuPanel.isRedFirst();
+        if (isRed) {
+            if (redCount == MAX_TILES_FIRST) {
+                gameOverMessage = "Red wins!";
+            } else if (blueCount == MAX_TILES_FIRST - 1) {
+                gameOverMessage = "Blue wins!";
+            }
+        } else {
+           if (redCount == MAX_TILES_FIRST - 1) {
+               gameOverMessage = "Red wins!";
+           } else if (blueCount == MAX_TILES_FIRST) {
+               gameOverMessage = "Blue wins!";
+           }
+        }
+        if (assassinTriggered) {
+            gameOverMessage = "You were killed by the assassin!";
+        }
+        if (!gameOverMessage.equals("")) {
+            resetBoard();
+        }
+        return gameOverMessage;
+    }
+
+    private void resetBoard() {
+        reset = true;
+        redCount = 0;
+        blueCount = 0;
+        selectedSquare = -1;
+        masterView = true;
+        locations.clear();
+        masterClues.clear();
+        assassinTriggered = false;
     }
 
     public void setMasterView() {

@@ -46,8 +46,9 @@ public class CadeNomesApp extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
-
-            if (command.equalsIgnoreCase("Turn Red")) {
+            if (command.equalsIgnoreCase("  ")) {
+                gameMenuPanel.switchFirstColor();
+            } else if (command.equalsIgnoreCase("Turn Red")) {
                 gamePanel.changeColor(Color.RED);
             } else if (command.equalsIgnoreCase("Turn Blue")) {
                 gamePanel.changeColor(Color.BLUE);
@@ -55,13 +56,15 @@ public class CadeNomesApp extends JFrame {
                 gamePanel.changeColor(Color.GREEN);
             } else if (command.equalsIgnoreCase("Turn Black")) {
                 gamePanel.changeColor(Color.BLACK);
-                revealGame(false);  //TODO: have a method that checks if game is over and call here
             } else if (command.equalsIgnoreCase("Load New Word list")) {
                 gamePanel.loadWords();
             } else if (command.equalsIgnoreCase("Reset Board")) {
                 gamePanel.setReset(true);
             } else if (command.equalsIgnoreCase("Switch View")) {
                 gamePanel.setMasterView();
+            }
+            if (!gamePanel.isGameOver().equals("")) {
+                revealGame(false);
             }
             gamePanel.repaint();
         }
