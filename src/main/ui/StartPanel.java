@@ -7,12 +7,15 @@ import java.util.ArrayList;
 
 public class StartPanel extends MenuPanel {
 
-    public StartPanel(ActionListener listener, int width, int height) {
+    public StartPanel(ActionListener listener, int width, int height, JLabel gameOverMessage) {
         setPreferredSize(new Dimension(width, height));
         setLayout(new GridLayout(0, 1, 10, 5));
         setBackground(Color.ORANGE);
         createMenuLabel("Start Menu");
+        gameOverMessage.setHorizontalAlignment(JLabel.CENTER);
+        gameOverMessage.setForeground(Color.WHITE);
         createMenuButtons(listener);
+        add(gameOverMessage);
     }
 
     private void createMenuButtons(ActionListener listener) {

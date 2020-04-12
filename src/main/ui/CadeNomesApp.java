@@ -10,6 +10,7 @@ public class CadeNomesApp extends JFrame {
     GamePanel gamePanel;
     GameMenuPanel gameMenuPanel;
     StartPanel startPanel;
+    JLabel gameOverLabel;
 
     public CadeNomesApp() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -17,7 +18,9 @@ public class CadeNomesApp extends JFrame {
         setMinimumSize(new Dimension(800, 800));
         gamePanel = new GamePanel(this.getWidth(), this.getHeight());
         gameMenuPanel = new GameMenuPanel(new MenuButtonActionListener(), this.getWidth());
-        startPanel = new StartPanel(new StartButtonActionListener(), this.getWidth(), this.getHeight());
+
+        gameOverLabel = new JLabel("");
+        startPanel = new StartPanel(new StartButtonActionListener(), this.getWidth(), this.getHeight(), gameOverLabel);
 
 
         add(gamePanel);
@@ -33,6 +36,9 @@ public class CadeNomesApp extends JFrame {
         startPanel.setVisible(!reveal);
         gamePanel.setVisible(reveal);
         gameMenuPanel.setVisible(reveal);
+        if (reveal) {
+            gameOverLabel.setText("");
+        }
     }
 
     private void centerOnScreen() {
@@ -63,8 +69,11 @@ public class CadeNomesApp extends JFrame {
             } else if (command.equalsIgnoreCase("Switch View")) {
                 gamePanel.setMasterView();
             }
-            if (!gamePanel.isGameOver().equals("")) {
+            String gameOver = gamePanel.isGameOver();
+            if (!gameOver.equals("")) {
+                gameOverLabel.setText(gameOver);
                 revealGame(false);
+
             }
             gamePanel.repaint();
         }
