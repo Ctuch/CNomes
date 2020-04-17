@@ -1,24 +1,27 @@
 package main.model;
 
+import main.ui.Colors;
+
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Location {
 
-    private Color color;
+    private Color coverColor;
+    private Color masterColor;
     private int xPos;
     private int yPos;
 
     public Location(int xPos, int yPos) {
         this.xPos = xPos;
         this.yPos = yPos;
-        color = Color.LIGHT_GRAY;
+        coverColor = Colors.TILE;
+        masterColor = Colors.NEUTRAL_MASTER;
     }
 
-    public Location(int xPos, int yPos, Color color) {
+    public Location(int xPos, int yPos, Color coverColor) {
         this.xPos = xPos;
         this.yPos = yPos;
-        this.color = color;
+        this.coverColor = coverColor;
     }
 
     public void setPos(int xPos, int yPos) {
@@ -34,11 +37,19 @@ public class Location {
         return yPos;
     }
 
-    public Color getColor() {
-        return color;
+    public Color getCoverColor() {
+        return coverColor;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
+    public void setCoverColor(Color coverColor) {
+        this.coverColor = coverColor;
+    }
+
+    public Color getMasterColor() {
+        return masterColor;
+    }
+
+    public void setMasterColor(Color masterColor) {
+        this.masterColor = masterColor;
     }
 }

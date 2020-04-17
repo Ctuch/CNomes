@@ -18,13 +18,11 @@ public class GamePanel extends JPanel {
     private final static int C_Y_MULTIPLIER = C_HEIGHT + 10;
     private final static int TEXT_HORIZ_SPACE = C_WIDTH / 2;
     private final static int TEXT_VERT_SPACE = C_Y_MULTIPLIER / 2;
-    private final static Color MASTER_COLOR = new Color(236, 236, 236);
     private final static int MAX_TILES_FIRST = 9;
 
 
     private int selectedSquare;
     private ArrayList<Location> locations;
-    private ArrayList<Location> masterClues;
 
     private Boolean reset;
     private Boolean masterView;
@@ -38,7 +36,6 @@ public class GamePanel extends JPanel {
         setPreferredSize(new Dimension((width * 3) / 4, height));
         setBackground(Color.WHITE);
         locations = new ArrayList<>();
-        masterClues = new ArrayList<>();
         selectedSquare = -1;
         reset = true;
         masterView = true;
@@ -66,10 +63,7 @@ public class GamePanel extends JPanel {
             for (int j = 1; j <= 5; j++) {
                 int currentPos = getCurrentPos(i, j);
                 drawTile(i, j, g, currentPos);
-                if (masterView) {
-                    drawMasterClue(i, j, g, currentPos);
-                }
-                if (!(words == null) && locations.get(currentPos).getColor() == Colors.TILE) {
+                if (!(words == null) && locations.get(currentPos).getCoverColor() == Colors.TILE) {
                     writeWord(words.get(currentPos), i, j, g);
                 }
             }
@@ -84,11 +78,6 @@ public class GamePanel extends JPanel {
                 int currentPos = getCurrentPos(i, j);
                 locations.add(new Location(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER));
                 drawTile(i, j, g, currentPos);
-                if (masterView) {
-                    masterClues.add(new Location(locations.get(currentPos).getxPos(),
-                            locations.get(currentPos).getyPos() + C_HEIGHT, MASTER_COLOR));
-                    drawMasterClue(i, j, g, currentPos);
-                }
                 if (!(words == null)) {
                     writeWord(words.get(currentPos), i, j, g);
                 }
@@ -103,14 +92,12 @@ public class GamePanel extends JPanel {
     }
 
     private void drawTile(int i, int j, Graphics g, int currentPos) {
-        g.setColor(locations.get(currentPos).getColor());
+        if (masterView) {
+            g.setColor(locations.get(currentPos).getMasterColor());
+        } else {
+            g.setColor(locations.get(currentPos).getCoverColor());
+        }
         g.fillRect(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER, C_WIDTH, C_HEIGHT);
-    }
-
-    private void drawMasterClue(int i, int j, Graphics g, int currentPos) {
-        g.setColor(masterClues.get(currentPos).getColor());
-        g.fillRect(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER + C_HEIGHT,
-                C_WIDTH, 10);
     }
 
     private void writeWord(String word, int i, int j, Graphics g) {
@@ -133,23 +120,36 @@ public class GamePanel extends JPanel {
 
     public void changeColor(Color color) {
         if (selectedSquare != -1) {
-            if (inLocations) {
-                locations.get(selectedSquare).setColor(color);
-                updateCounts(color);
+            if (masterView) {
+                locations.get(selectedSquare).setMasterColor(masterVersionOfColor(color));
             } else {
-                System.out.println("Selected square was" + selectedSquare);
-                masterClues.get(selectedSquare).setColor(color);
+                locations.get(selectedSquare).setCoverColor(color);
             }
+            updateCounts(color);
+        }
+    }
+
+    private Color masterVersionOfColor(Color color) {
+        if (color.equals(Colors.RED_COVER)) {
+            return Colors.RED_MASTER;
+        } else if (color.equals(Colors.BLUE_COVER)) {
+            return Colors.BLUE_MASTER;
+        } else if (color.equals(Colors.NEUTRAL_COVER)) {
+            return Colors.NEUTRAL_MASTER;
+        } else {
+            return Colors.BLACK_MASTER;
         }
     }
 
     private void updateCounts(Color color) {
-        if (color.equals(Colors.RED_COVER)) {
-            redCount++;
-        } else if (color.equals(Colors.BLUE_COVER)) {
-            blueCount++;
-        } else if (color.equals(Colors.BLACK_COVER)) {
-            assassinTriggered = true;
+        if (!masterView) {
+            if (color.equals(Colors.RED_COVER)) {
+                redCount++;
+            } else if (color.equals(Colors.BLUE_COVER)) {
+                blueCount++;
+            } else if (color.equals(Colors.BLACK_COVER)) {
+                assassinTriggered = true;
+            }
         }
     }
 
@@ -158,35 +158,28 @@ public class GamePanel extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if (updateSelectedCard(e.getX(), e.getY(), locations, C_HEIGHT)) {
-                    inLocations = true;
-                } else if (updateSelectedCard(e.getX(), e.getY(), masterClues, 10)) {
-                    inLocations = false;
-                }
-
+                updateSelectedCard(e.getX(), e.getY());
             }
         });
     }
 
-    private boolean updateSelectedCard(int x, int y, ArrayList<Location> locs, int height) {
-        for (int i = 0; i < locs.size(); i++) {
-            if (isInSpace(x, y, locs.get(i).getxPos(), locs.get(i).getyPos(), height)) {
+    private void updateSelectedCard(int x, int y) {
+        for (int i = 0; i < locations.size(); i++) {
+            if (isInSpace(x, y, locations.get(i).getxPos(), locations.get(i).getyPos())) {
                 selectedSquare = i;
                 System.out.println("selected square is " + i);
-                System.out.println("On a location: " + (height == C_HEIGHT));
-                return true;
+                return;
             }
         }
         System.out.println("No square selected");
         selectedSquare = -1;
-        return false;
     }
 
     //EFFECTS: returns true if the mouse clicks within the square of the person
-    public boolean isInSpace(int mouseX, int mouseY, int locationX, int locationY, int height) {
+    public boolean isInSpace(int mouseX, int mouseY, int locationX, int locationY) {
         int differenceX = mouseX - locationX;
         int differenceY = mouseY - locationY;
-        return differenceX <= 100 && differenceX >= 0 && differenceY <= height && differenceY >= 0;
+        return differenceX <= C_WIDTH && differenceX >= 0 && differenceY <= C_HEIGHT && differenceY >= 0;
     }
 
     public void setReset(Boolean reset) {
@@ -204,11 +197,11 @@ public class GamePanel extends JPanel {
                 gameOverMessage = "Blue wins!";
             }
         } else {
-           if (redCount == MAX_TILES_FIRST - 1) {
-               gameOverMessage = "Red wins!";
-           } else if (blueCount == MAX_TILES_FIRST) {
-               gameOverMessage = "Blue wins!";
-           }
+            if (redCount == MAX_TILES_FIRST - 1) {
+                gameOverMessage = "Red wins!";
+            } else if (blueCount == MAX_TILES_FIRST) {
+                gameOverMessage = "Blue wins!";
+            }
         }
         if (assassinTriggered) {
             gameOverMessage = "You were killed by the assassin!";
@@ -226,7 +219,6 @@ public class GamePanel extends JPanel {
         selectedSquare = -1;
         masterView = true;
         locations.clear();
-        masterClues.clear();
         assassinTriggered = false;
     }
 
