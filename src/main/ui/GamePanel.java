@@ -69,7 +69,7 @@ public class GamePanel extends JPanel {
                 if (masterView) {
                     drawMasterClue(i, j, g, currentPos);
                 }
-                if (!(words == null) && locations.get(currentPos).getColor() == Color.LIGHT_GRAY) {
+                if (!(words == null) && locations.get(currentPos).getColor() == Colors.TILE) {
                     writeWord(words.get(currentPos), i, j, g);
                 }
             }
@@ -114,7 +114,7 @@ public class GamePanel extends JPanel {
     }
 
     private void writeWord(String word, int i, int j, Graphics g) {
-        g.setColor(Color.BLACK);
+        g.setColor(Colors.TEXT);
         //TODO: fix centering of words
         g.drawString(word, i * C_X_MULTIPLIER + TEXT_HORIZ_SPACE - word.length() * 4,
                 j * C_Y_MULTIPLIER + TEXT_VERT_SPACE);
@@ -144,11 +144,11 @@ public class GamePanel extends JPanel {
     }
 
     private void updateCounts(Color color) {
-        if (color.equals(Color.RED)) {
+        if (color.equals(Colors.RED_COVER)) {
             redCount++;
-        } else if (color.equals(Color.BLUE)) {
+        } else if (color.equals(Colors.BLUE_COVER)) {
             blueCount++;
-        } else if (color.equals(Color.BLACK)) {
+        } else if (color.equals(Colors.BLACK_COVER)) {
             assassinTriggered = true;
         }
     }

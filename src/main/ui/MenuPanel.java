@@ -13,7 +13,7 @@ public abstract class MenuPanel extends JPanel{
         JLabel mainMenu = new JLabel(text);
         mainMenu.setPreferredSize(new Dimension(800,
                 100));
-        mainMenu.setForeground(Color.WHITE);
+        mainMenu.setForeground(Colors.MENU_TEXT);
         mainMenu.setHorizontalAlignment(JLabel.CENTER);
         add(mainMenu);
     }

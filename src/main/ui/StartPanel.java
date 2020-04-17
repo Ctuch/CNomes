@@ -10,10 +10,10 @@ public class StartPanel extends MenuPanel {
     public StartPanel(ActionListener listener, int width, int height, JLabel gameOverMessage) {
         setPreferredSize(new Dimension(width, height));
         setLayout(new GridLayout(0, 1, 10, 5));
-        setBackground(Color.ORANGE);
+        setBackground(Colors.START_PANEL);
         createMenuLabel("Start Menu");
         gameOverMessage.setHorizontalAlignment(JLabel.CENTER);
-        gameOverMessage.setForeground(Color.WHITE);
+        gameOverMessage.setForeground(Colors.MENU_TEXT);
         createMenuButtons(listener);
         add(gameOverMessage);
     }

@@ -69,13 +69,13 @@ public class CadeNomesApp extends JFrame {
             if (command.equalsIgnoreCase("  ")) {
                 gameMenuPanel.switchFirstColor();
             } else if (command.equalsIgnoreCase("Turn Red")) {
-                gamePanel.changeColor(Color.RED);
+                gamePanel.changeColor(Colors.RED_COVER);
             } else if (command.equalsIgnoreCase("Turn Blue")) {
-                gamePanel.changeColor(Color.BLUE);
+                gamePanel.changeColor(Colors.BLUE_COVER);
             } else if (command.equalsIgnoreCase("Turn Neutral")) {
-                gamePanel.changeColor(Color.GREEN);
+                gamePanel.changeColor(Colors.NEUTRAL_COVER);
             } else if (command.equalsIgnoreCase("Turn Black")) {
-                gamePanel.changeColor(Color.BLACK);
+                gamePanel.changeColor(Colors.BLACK_COVER);
             } else if (command.equalsIgnoreCase("Load New Word list")) {
                 gamePanel.loadWords();
             } else if (command.equalsIgnoreCase("Reset Board")) {

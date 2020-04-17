@@ -15,7 +15,7 @@ public class GameMenuPanel extends MenuPanel {
     protected GameMenuPanel(ActionListener listener, int width) {
         setPreferredSize(new Dimension(width, 200));
         setLayout(new GridLayout(2, 0, 10, 5));
-        setBackground(Color.GRAY);
+        setBackground(Colors.MENU_PANEL);
         createMenuLabel("Menu");
         createMenuButtons(listener);
         redFirst = true;
@@ -23,7 +23,7 @@ public class GameMenuPanel extends MenuPanel {
 
     private void createMenuButtons(ActionListener listener) {
         firstButton = new JButton("  ");
-        firstButton.setBackground(Color.RED);
+        firstButton.setBackground(Colors.RED_COVER);
         firstButton.setOpaque(true);
         firstButton.setBorderPainted(false);
 
@@ -50,11 +50,11 @@ public class GameMenuPanel extends MenuPanel {
     }
 
     public void switchFirstColor() {
-        if (firstButton.getBackground().equals(Color.RED)) {
-            firstButton.setBackground(Color.BLUE);
+        if (firstButton.getBackground().equals(Colors.RED_COVER)) {
+            firstButton.setBackground(Colors.BLUE_COVER);
             redFirst = false;
         } else {
-            firstButton.setBackground(Color.RED);
+            firstButton.setBackground(Colors.RED_COVER);
             redFirst = true;
         }
     }

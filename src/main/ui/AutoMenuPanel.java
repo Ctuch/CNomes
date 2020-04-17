@@ -13,7 +13,7 @@ public class AutoMenuPanel extends MenuPanel {
     public AutoMenuPanel(ActionListener listener, int width) {
         setPreferredSize(new Dimension(width, 200));
         setLayout(new GridLayout(1, 0, 10, 5));
-        setBackground(Color.GRAY);
+        setBackground(Colors.MENU_PANEL);
         createMenuLabel("Menu");
         createColorLabel();
         createMenuButtons(listener);
@@ -22,7 +22,11 @@ public class AutoMenuPanel extends MenuPanel {
 
     private void createColorLabel() {
         JLabel colorLabel = new JLabel();
-        colorLabel.setBackground(Color.PINK);
+        if (redFirst) {
+            colorLabel.setBackground(Colors.RED_COVER);
+        } else {
+            colorLabel.setBackground(Colors.BLUE_COVER);
+        }
         colorLabel.setOpaque(true);
         add(colorLabel);
     }
