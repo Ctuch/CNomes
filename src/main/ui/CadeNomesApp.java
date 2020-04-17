@@ -10,32 +10,46 @@ public class CadeNomesApp extends JFrame {
     GamePanel gamePanel;
     GameMenuPanel gameMenuPanel;
     StartPanel startPanel;
+    AutoMenuPanel autoMenuPanel;
     JLabel gameOverLabel;
 
     public CadeNomesApp() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-        setMinimumSize(new Dimension(800, 800));
+        setMinimumSize(new Dimension(800, 650));
         gamePanel = new GamePanel(this.getWidth(), this.getHeight());
         gameMenuPanel = new GameMenuPanel(new MenuButtonActionListener(), this.getWidth());
 
         gameOverLabel = new JLabel("");
         startPanel = new StartPanel(new StartButtonActionListener(), this.getWidth(), this.getHeight(), gameOverLabel);
-
+        autoMenuPanel = new AutoMenuPanel(new MenuButtonActionListener(), this.getWidth());
 
         add(gamePanel);
         add(gameMenuPanel, BorderLayout.SOUTH);
+        add(autoMenuPanel, BorderLayout.SOUTH);
         add(startPanel, BorderLayout.WEST);
-        revealGame(false);
+        revealGame(false, true);
         pack();
         centerOnScreen();
         setVisible(true);
     }
 
-    private void revealGame(boolean reveal) {
+    private void revealGame(boolean reveal, boolean isAuto) {
         startPanel.setVisible(!reveal);
+        if (isAuto && reveal) {
+            remove(gameMenuPanel);
+            add(autoMenuPanel, BorderLayout.SOUTH);
+            autoMenuPanel.setVisible(reveal);
+        } else if (reveal) {
+            remove(autoMenuPanel);
+            add(gameMenuPanel, BorderLayout.SOUTH);
+            gameMenuPanel.setVisible(reveal);
+        } else {
+            autoMenuPanel.setVisible(reveal);
+            gameMenuPanel.setVisible(reveal);
+        }
+        //TODO: reveal auto vs. manual
         gamePanel.setVisible(reveal);
-        gameMenuPanel.setVisible(reveal);
         if (reveal) {
             gameOverLabel.setText("");
         }
@@ -72,7 +86,7 @@ public class CadeNomesApp extends JFrame {
             String gameOver = gamePanel.isGameOver();
             if (!gameOver.equals("")) {
                 gameOverLabel.setText(gameOver);
-                revealGame(false);
+                revealGame(false, true);
 
             }
             gamePanel.repaint();
@@ -87,9 +101,9 @@ public class CadeNomesApp extends JFrame {
             String command = e.getActionCommand();
 
             if (command.equalsIgnoreCase("Start Manual Game")) {
-                revealGame(true);
+                revealGame(true, false);
             } else if (command.equalsIgnoreCase("Start Auto Game")) {
-                revealGame(true);
+                revealGame(true, true);
             }
             gamePanel.repaint();
         }

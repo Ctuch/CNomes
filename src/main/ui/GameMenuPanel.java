@@ -27,22 +27,22 @@ public class GameMenuPanel extends MenuPanel {
         firstButton.setOpaque(true);
         firstButton.setBorderPainted(false);
 
-        JButton addButton = new JButton("Turn Red");
-        JButton moveButton = new JButton("Turn Blue");
-        JButton attackButton = new JButton("Turn Neutral");
-        JButton specialActionButton = new JButton("Turn Black");
-        JButton displayButton = new JButton("Load New Word list");
-        JButton helpButton = new JButton("Reset Board");
-        JButton switchView = new JButton("Switch View");
+        JButton redButton = new JButton("Turn Red");
+        JButton blueButton = new JButton("Turn Blue");
+        JButton neutralButton = new JButton("Turn Neutral");
+        JButton blackButton = new JButton("Turn Black");
+        JButton newWordButton = new JButton("Load New Word list");
+        JButton resetButton = new JButton("Reset Board");
+        JButton switchViewButton = new JButton("Switch View");
         ArrayList<JButton> menuButtons = new ArrayList<>();
         menuButtons.add(firstButton);
-        menuButtons.add(addButton);
-        menuButtons.add(moveButton);
-        menuButtons.add(attackButton);
-        menuButtons.add(specialActionButton);
-        menuButtons.add(displayButton);
-        menuButtons.add(helpButton);
-        menuButtons.add(switchView);
+        menuButtons.add(redButton);
+        menuButtons.add(blueButton);
+        menuButtons.add(neutralButton);
+        menuButtons.add(blackButton);
+        menuButtons.add(newWordButton);
+        menuButtons.add(resetButton);
+        menuButtons.add(switchViewButton);
 
         addActionListener(menuButtons, listener);
 
