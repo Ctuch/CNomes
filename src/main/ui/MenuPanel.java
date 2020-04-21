@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * Common functionality between all the menu panels
+ */
 public abstract class MenuPanel extends JPanel{
 
     //MODIFIES: this
@@ -26,13 +29,7 @@ public abstract class MenuPanel extends JPanel{
         }
     }
 
-    /**
-     * @param buttons
-     * @param listener
-     */
-    /*
-     * @effects: adds the ActionListener listener to each button
-     */
+
     protected void addActionListener(ArrayList<JButton> buttons, ActionListener listener) {
         for (JButton button : buttons) {
             button.addActionListener(listener);

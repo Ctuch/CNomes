@@ -5,15 +5,22 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-//represents a menu panel with a display of buttons for the user to interact with
+/**
+ * menu panel for the manual version
+ */
 public class GameMenuPanel extends MenuPanel {
 
-    private JButton firstButton;
-    private static boolean redFirst;
+    private JButton firstButton; // tile for which team goes first
+    private static boolean redFirst; // determines if red team goes first
+    private static final int HEIGHT = 200;
 
-    //EFFECTS: sets the size, layout, and background color for the panel
-    protected GameMenuPanel(ActionListener listener, int width) {
-        setPreferredSize(new Dimension(width, 200));
+    /**
+     *
+     * @param listener
+     * @param width
+     */
+    public GameMenuPanel(ActionListener listener, int width) {
+        setPreferredSize(new Dimension(width, HEIGHT));
         setLayout(new GridLayout(2, 0, 10, 5));
         setBackground(Colors.MENU_PANEL);
         createMenuLabel("Menu");
@@ -49,6 +56,9 @@ public class GameMenuPanel extends MenuPanel {
         createMenuButtons(menuButtons);
     }
 
+    /**
+     * Switches the display of which team goes first
+     */
     public void switchFirstColor() {
         if (firstButton.getBackground().equals(Colors.RED_COVER)) {
             firstButton.setBackground(Colors.BLUE_COVER);
@@ -59,6 +69,10 @@ public class GameMenuPanel extends MenuPanel {
         }
     }
 
+    /**
+     * returns if the red team has the first turn
+     * @return if red has first turn
+     */
     public static boolean isRedFirst() {
         return redFirst;
     }

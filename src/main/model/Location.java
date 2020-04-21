@@ -18,9 +18,9 @@ public class Location {
         masterColor = Colors.NEUTRAL_MASTER;
     }
 
-    public Location(int xPos, int yPos, Color coverColor) {
-        this.xPos = xPos;
-        this.yPos = yPos;
+    public Location(Color coverColor) {
+        this.xPos = 0;
+        this.yPos = 0;
         this.coverColor = coverColor;
     }
 

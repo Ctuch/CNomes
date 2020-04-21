@@ -10,36 +10,43 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Creates and manages the board game tiles
+ */
 public class GamePanel extends JPanel {
 
     private final static int C_HEIGHT = 50;
     private final static int C_WIDTH = 100;
-    private final static int C_X_MULTIPLIER = C_WIDTH + 10;
-    private final static int C_Y_MULTIPLIER = C_HEIGHT + 10;
-    private final static int TEXT_HORIZ_SPACE = C_WIDTH / 2;
-    private final static int TEXT_VERT_SPACE = C_Y_MULTIPLIER / 2;
-    private final static int MAX_TILES_FIRST = 9;
+    private final static int C_X_MULTIPLIER = C_WIDTH + 10; // distance between tiles horizontally
+    private final static int C_Y_MULTIPLIER = C_HEIGHT + 10; // distance between tiles vertically
+    private final static int TEXT_HORIZ_SPACE = C_WIDTH / 2; // text horizontal spacing
+    private final static int TEXT_VERT_SPACE = C_Y_MULTIPLIER / 2; // text vertical spacing
+    private final static int MAX_TILES_FIRST = 9; // maximum team tiles
 
 
-    private int selectedSquare;
-    private ArrayList<Location> locations;
+    private int selectedSquare; // most recent clicked on square by client
+    private ArrayList<Location> locations; // list of tile locations on the board
 
-    private Boolean reset;
-    private Boolean masterView;
-    private ArrayList<String> words;
-    private boolean inLocations;
-    private int redCount;
-    private int blueCount;
-    private boolean assassinTriggered;
+    private Boolean reset; // determines whether board is reset
+    private Boolean masterView; // determines whether the spy master view is displayed
+    private ArrayList<String> words; // words displayed on tiles
+    private int redCount; // red tiles revealed
+    private int blueCount; // blue tiles revealed
+    private boolean assassinTriggered; // if the black tile has been chosen
 
+    /**
+     * creates the game panel
+     * @param width width for the game panel
+     * @param height height for the game panel
+     */
     public GamePanel(int width, int height) {
-        setPreferredSize(new Dimension((width * 3) / 4, height));
-        setBackground(Color.WHITE);
+        // TODO: change height to 3/4 of the screen
+        setPreferredSize(new Dimension(width, height));
+        setBackground(Colors.GAME_PANEL);
         locations = new ArrayList<>();
         selectedSquare = -1;
         reset = true;
-        masterView = true;
-        inLocations = false;
+        masterView = false;
         loadWords();
         addMouseControl();
         redCount = 0;
@@ -58,7 +65,8 @@ public class GamePanel extends JPanel {
     }
 
     private void drawBoard(Graphics g) {
-        g.setFont(g.getFont().deriveFont(Font.PLAIN, 12));
+        // TODO: learn to play with fonts for graphics
+        // g.setFont(g.getFont().deriveFont(Font.PLAIN, 12));
         for (int i = 1; i <= 5; i++) {
             for (int j = 1; j <= 5; j++) {
                 int currentPos = getCurrentPos(i, j);
@@ -84,6 +92,7 @@ public class GamePanel extends JPanel {
             }
         }
         reset = false;
+        // TODO: bug?
         masterView = false;
     }
 
@@ -110,7 +119,7 @@ public class GamePanel extends JPanel {
 
     public void loadWords() {
         try {
-            WordList wordList = new WordList();
+            WordList wordList = new WordList(false);
             words = wordList.getWords();
         } catch (IOException e) {
             System.out.println("I'm sorry please try again");
@@ -176,15 +185,10 @@ public class GamePanel extends JPanel {
     }
 
     //EFFECTS: returns true if the mouse clicks within the square of the person
-    public boolean isInSpace(int mouseX, int mouseY, int locationX, int locationY) {
+    private boolean isInSpace(int mouseX, int mouseY, int locationX, int locationY) {
         int differenceX = mouseX - locationX;
         int differenceY = mouseY - locationY;
         return differenceX <= C_WIDTH && differenceX >= 0 && differenceY <= C_HEIGHT && differenceY >= 0;
-    }
-
-    public void setReset(Boolean reset) {
-        this.selectedSquare = -1;
-        this.reset = reset;
     }
 
     public String isGameOver() {
@@ -212,7 +216,7 @@ public class GamePanel extends JPanel {
         return gameOverMessage;
     }
 
-    private void resetBoard() {
+    public void resetBoard() {
         reset = true;
         redCount = 0;
         blueCount = 0;

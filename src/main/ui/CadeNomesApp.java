@@ -5,14 +5,20 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Mainframe class for displaying UI
+ */
 public class CadeNomesApp extends JFrame {
 
-    GamePanel gamePanel;
-    GameMenuPanel gameMenuPanel;
-    StartPanel startPanel;
-    AutoMenuPanel autoMenuPanel;
-    JLabel gameOverLabel;
+    GamePanel gamePanel; // Displays word tiles
+    GameMenuPanel gameMenuPanel; // Manual game menu panel displayed below gamePanel
+    StartPanel startPanel; // Displays manual and auto game choices
+    AutoMenuPanel autoMenuPanel; // Auto game menu panel displayed below gamePanel
+    JLabel gameOverLabel; // End game description on startPanel
 
+    /**
+     * Constructor for class
+     */
     public CadeNomesApp() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -34,35 +40,42 @@ public class CadeNomesApp extends JFrame {
         setVisible(true);
     }
 
-    private void revealGame(boolean reveal, boolean isAuto) {
-        startPanel.setVisible(!reveal);
-        if (isAuto && reveal) {
+    /**
+     * Determines which panels, buttons, etc. are hidden to the user
+     * @param gameReveal determines if the game screen is shown
+     * @param isAuto determines whether the auto game screen is shown
+     */
+    private void revealGame(boolean gameReveal, boolean isAuto) {
+        //TODO: reveal auto vs. manual boards
+        startPanel.setVisible(!gameReveal);
+        if (isAuto && gameReveal) {
             remove(gameMenuPanel);
             add(autoMenuPanel, BorderLayout.SOUTH);
-            autoMenuPanel.setVisible(reveal);
-        } else if (reveal) {
+            autoMenuPanel.setVisible(gameReveal);
+        } else if (gameReveal) {
             remove(autoMenuPanel);
             add(gameMenuPanel, BorderLayout.SOUTH);
-            gameMenuPanel.setVisible(reveal);
+            gameMenuPanel.setVisible(gameReveal);
         } else {
-            autoMenuPanel.setVisible(reveal);
-            gameMenuPanel.setVisible(reveal);
+            autoMenuPanel.setVisible(gameReveal);
+            gameMenuPanel.setVisible(gameReveal);
         }
-        //TODO: reveal auto vs. manual
-        gamePanel.setVisible(reveal);
-        if (reveal) {
+
+        gamePanel.setVisible(gameReveal);
+        if (gameReveal) {
             gameOverLabel.setText("");
         }
     }
 
+    // centers .this
     private void centerOnScreen() {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
     }
 
-    //MODIFIES: this
-    //EFFECTS: selects and runs the method associated with the triggered action from the game buttons
-    protected class MenuButtonActionListener implements ActionListener {
+    // MODIFIES: this
+    // EFFECTS: selects and runs the method associated with the triggered action from the menu buttons
+    private class MenuButtonActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
@@ -79,7 +92,7 @@ public class CadeNomesApp extends JFrame {
             } else if (command.equalsIgnoreCase("Load New Word list")) {
                 gamePanel.loadWords();
             } else if (command.equalsIgnoreCase("Reset Board")) {
-                gamePanel.setReset(true);
+                gamePanel.resetBoard();
             } else if (command.equalsIgnoreCase("Switch View")) {
                 gamePanel.setMasterView();
             }
@@ -93,9 +106,9 @@ public class CadeNomesApp extends JFrame {
         }
     }
 
-    //MODIFIES: this
-    //EFFECTS: selects and runs the method associated with the triggered action from the game buttons
-    protected class StartButtonActionListener implements ActionListener {
+    // MODIFIES: this
+    // EFFECTS: selects and runs the method associated with the triggered action from the start buttons
+    private class StartButtonActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
@@ -105,7 +118,6 @@ public class CadeNomesApp extends JFrame {
             } else if (command.equalsIgnoreCase("Start Auto Game")) {
                 revealGame(true, true);
             }
-            gamePanel.repaint();
         }
     }
 }

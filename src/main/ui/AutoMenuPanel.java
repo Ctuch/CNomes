@@ -5,11 +5,18 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * creates the menu for the automatic version
+ */
 public class AutoMenuPanel extends MenuPanel {
 
-    private static boolean redFirst;
+    private static boolean redFirst; // determines if red team goes first
 
-
+    /**
+     * creates the meny for the automatic version
+     * @param listener
+     * @param width
+     */
     public AutoMenuPanel(ActionListener listener, int width) {
         setPreferredSize(new Dimension(width, 200));
         setLayout(new GridLayout(1, 0, 10, 5));
@@ -32,7 +39,6 @@ public class AutoMenuPanel extends MenuPanel {
     }
 
     private void createMenuButtons(ActionListener listener) {
-        //TODO: Add label for color of starting team
         ArrayList<JButton> menuButtons = new ArrayList<>();
         JButton switchViewButton = new JButton("Switch View");
         menuButtons.add(switchViewButton);
@@ -42,6 +48,10 @@ public class AutoMenuPanel extends MenuPanel {
         createMenuButtons(menuButtons);
     }
 
+    /**
+     *
+     * @param redFirst
+     */
     public static void setRedFirst(boolean redFirst) {
         AutoMenuPanel.redFirst = redFirst;
     }
