@@ -10,26 +10,28 @@ public class Board {
 
     private ArrayList<Location> tiles;
     private ArrayList<String> words;
+    private ArrayList<String> allWords;
     private final Random random;
 
     public Board() {
         random = new Random();
         tiles = loadRandomTileSet();
-        words = loadWords();
+        allWords = loadWords();
+        selectNewWords();
     }
 
-    public ArrayList<String> selectNewWords() {
-        if (words.size() < 25) {
-            words = loadWords();
+    public void selectNewWords() {
+        if (allWords.size() < 25) {
+            allWords = loadWords();
         }
 
         ArrayList<String> selectedWords = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
-            String word = words.get(random.nextInt(words.size()));
+            String word = allWords.get(random.nextInt(allWords.size()));
             selectedWords.add(word);
-            words.remove(word);
+            allWords.remove(word);
         }
-        return selectedWords;
+        words = selectedWords;
     }
 
     public void loadNewBoard() {
@@ -63,9 +65,10 @@ public class Board {
     }
 
     private void assignColor(Color color, ArrayList<Location> locations, ArrayList<Integer> availableTiles) {
-        int tile = random.nextInt(availableTiles.size());
+        int tileIndex = random.nextInt(availableTiles.size());
+        int tile = availableTiles.get(tileIndex);
         locations.get(tile).setMasterColor(color);
-        availableTiles.remove(tile);
+        availableTiles.remove(tileIndex);
     }
 
     private ArrayList<String> loadWords() {
@@ -82,5 +85,7 @@ public class Board {
         return tiles;
     }
 
-
+    public ArrayList<String> getWords() {
+        return words;
+    }
 }
