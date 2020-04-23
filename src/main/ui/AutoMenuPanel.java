@@ -41,7 +41,9 @@ public class AutoMenuPanel extends MenuPanel {
     private void createMenuButtons(ActionListener listener) {
         ArrayList<JButton> menuButtons = new ArrayList<>();
         JButton switchViewButton = new JButton("Switch View");
+        JButton quitButton = new JButton("Quit");
         menuButtons.add(switchViewButton);
+        menuButtons.add(quitButton);
 
         addActionListener(menuButtons, listener);
 

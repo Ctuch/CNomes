@@ -41,6 +41,7 @@ public class GameMenuPanel extends MenuPanel {
         JButton newWordButton = new JButton("Load New Word list");
         JButton resetButton = new JButton("Reset Board");
         JButton switchViewButton = new JButton("Switch View");
+        JButton quitButton = new JButton("Quit");
         ArrayList<JButton> menuButtons = new ArrayList<>();
         menuButtons.add(firstButton);
         menuButtons.add(redButton);
@@ -50,6 +51,7 @@ public class GameMenuPanel extends MenuPanel {
         menuButtons.add(newWordButton);
         menuButtons.add(resetButton);
         menuButtons.add(switchViewButton);
+        menuButtons.add(quitButton);
 
         addActionListener(menuButtons, listener);
 

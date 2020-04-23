@@ -6,13 +6,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * represents a random configuration of tiles
+ */
 public class Board {
 
-    private ArrayList<Location> tiles;
-    private ArrayList<String> words;
-    private ArrayList<String> allWords;
-    private final Random random;
+    private ArrayList<Location> tiles; // A list of tiles with master colors generated
+    private ArrayList<String> words; // A list of words to overlay on the tiles
+    private ArrayList<String> allWords; // A long list of words to generate random sets from
+    private final Random random; // random variable used throughout the class
 
+    /**
+     *  creates a random configuration of tiles with word labels
+     */
     public Board() {
         random = new Random();
         tiles = loadRandomTileSet();
@@ -20,6 +26,9 @@ public class Board {
         selectNewWords();
     }
 
+    /**
+     *  generates a new list of words for the board from the master list and deletes them from the master list
+     */
     public void selectNewWords() {
         if (allWords.size() < 25) {
             allWords = loadWords();
@@ -34,11 +43,18 @@ public class Board {
         words = selectedWords;
     }
 
+    /**
+     *  generates a new configuration of tiles
+     */
     public void loadNewBoard() {
         tiles = loadRandomTileSet();
     }
 
-
+    /**
+     *  generates a random configuration of tile master colors with 7 neutrals, 1 assassin, 8 or 9 reds,
+     *  and 8 or 9 blues depending on who is going first
+     * @return list of locations with the master colors
+     */
     private ArrayList<Location> loadRandomTileSet() {
         ArrayList<Location> locations = new ArrayList<>();
         boolean redFirst = random.nextBoolean();
@@ -81,10 +97,18 @@ public class Board {
         return null;
     }
 
+    /**
+     *  getter for field
+     * @return list of tiles
+     */
     public ArrayList<Location> getTiles() {
         return tiles;
     }
 
+    /**
+     *  getter for field
+     * @return list of words
+     */
     public ArrayList<String> getWords() {
         return words;
     }

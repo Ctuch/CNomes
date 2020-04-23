@@ -66,7 +66,7 @@ public class GamePanel extends JPanel {
 
     private void drawBoard(Graphics g) {
         // TODO: learn to play with fonts for graphics
-        // g.setFont(g.getFont().deriveFont(Font.PLAIN, 12));
+        g.setFont(g.getFont().deriveFont(Font.PLAIN, 12));
         for (int i = 1; i <= 5; i++) {
             for (int j = 1; j <= 5; j++) {
                 int currentPos = getCurrentPos(i, j);
@@ -221,7 +221,7 @@ public class GamePanel extends JPanel {
         redCount = 0;
         blueCount = 0;
         selectedSquare = -1;
-        masterView = true;
+        masterView = false;
         locations.clear();
         assassinTriggered = false;
     }

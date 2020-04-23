@@ -95,6 +95,9 @@ public class CadeNomesApp extends JFrame {
                 gamePanel.resetBoard();
             } else if (command.equalsIgnoreCase("Switch View")) {
                 gamePanel.setMasterView();
+            } else if (command.equalsIgnoreCase("Quit")) {
+                gamePanel.resetBoard();
+                revealGame(false, true);
             }
             String gameOver = gamePanel.isGameOver();
             if (!gameOver.equals("")) {
