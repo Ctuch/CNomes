@@ -52,6 +52,7 @@ public class GamePanel extends JPanel {
         redCount = 0;
         blueCount = 0;
         assassinTriggered = false;
+        ScorePanel.updateScore(redCount, blueCount);
     }
 
     @Override
@@ -154,8 +155,10 @@ public class GamePanel extends JPanel {
         if (!masterView) {
             if (color.equals(Colors.RED_COVER)) {
                 redCount++;
+                ScorePanel.updateScore(redCount, blueCount);
             } else if (color.equals(Colors.BLUE_COVER)) {
                 blueCount++;
+                ScorePanel.updateScore(redCount, blueCount);
             } else if (color.equals(Colors.BLACK_COVER)) {
                 assassinTriggered = true;
             }
@@ -220,6 +223,7 @@ public class GamePanel extends JPanel {
         reset = true;
         redCount = 0;
         blueCount = 0;
+        ScorePanel.updateScore(redCount, blueCount);
         selectedSquare = -1;
         masterView = false;
         locations.clear();

@@ -14,6 +14,7 @@ public class CadeNomesApp extends JFrame {
     GameMenuPanel gameMenuPanel; // Manual game menu panel displayed below gamePanel
     StartPanel startPanel; // Displays manual and auto game choices
     AutoMenuPanel autoMenuPanel; // Auto game menu panel displayed below gamePanel
+    ScorePanel scorePanel; //Displays game score
     JLabel gameOverLabel; // End game description on startPanel
 
     /**
@@ -23,14 +24,19 @@ public class CadeNomesApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(800, 650));
-        gamePanel = new GamePanel(this.getWidth(), this.getHeight());
+
         gameMenuPanel = new GameMenuPanel(new MenuButtonActionListener(), this.getWidth());
+        scorePanel = new ScorePanel(this.getWidth());
+        gamePanel = new GamePanel(this.getWidth(), this.getHeight());
+
 
         gameOverLabel = new JLabel("");
         startPanel = new StartPanel(new StartButtonActionListener(), this.getWidth(), this.getHeight(), gameOverLabel);
         autoMenuPanel = new AutoMenuPanel(new MenuButtonActionListener(), this.getWidth());
 
+
         add(gamePanel);
+        add(scorePanel, BorderLayout.NORTH);
         add(gameMenuPanel, BorderLayout.SOUTH);
         add(autoMenuPanel, BorderLayout.SOUTH);
         add(startPanel, BorderLayout.WEST);
@@ -48,6 +54,7 @@ public class CadeNomesApp extends JFrame {
     private void revealGame(boolean gameReveal, boolean isAuto) {
         //TODO: reveal auto vs. manual boards
         startPanel.setVisible(!gameReveal);
+        scorePanel.setVisible(gameReveal);
         if (isAuto && gameReveal) {
             remove(gameMenuPanel);
             add(autoMenuPanel, BorderLayout.SOUTH);
