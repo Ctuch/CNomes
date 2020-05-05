@@ -8,12 +8,12 @@ import java.awt.*;
  */
 public class ScorePanel extends JPanel {
 
-    private static JLabel redLabel; // label for displaying remaining tiles of the red team
-    private static JLabel blueLabel; // label for displaying remaining tiles of the blue team
+    private static JLabel redLabel; // Label for displaying remaining tiles of the red team
+    private static JLabel blueLabel; // Label for displaying remaining tiles of the blue team
 
     /**
-     * creates the score panel display
-     * @param width width of container frame
+     * Creates the score panel display
+     * @param width Width of container frame
      */
     public ScorePanel(int width) {
         setPreferredSize(new Dimension(width, 50));
@@ -44,9 +44,9 @@ public class ScorePanel extends JPanel {
     }
 
     /**
-     * updates text for score labels
-     * @param red new score for red team
-     * @param blue new score for blue team
+     * Updates text for score labels
+     * @param red New score for red team
+     * @param blue New score for blue team
      */
     public static void updateScore(int red, int blue) {
         if (GameMenuPanel.isRedFirst()) {

@@ -62,7 +62,7 @@ public class Board {
         ArrayList<Integer> availableTiles = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
             availableTiles.add(i);
-            locations.add(new Location(0, 0));
+            locations.add(new Location());
         }
 
         for (int i = 0; i < 9; i++) {

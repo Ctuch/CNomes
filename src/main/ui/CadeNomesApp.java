@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
  */
 public class CadeNomesApp extends JFrame {
 
-    GamePanel gamePanel; // Displays word tiles
+    ManualGamePanel manualGamePanel; // Displays word tiles
     GameMenuPanel gameMenuPanel; // Manual game menu panel displayed below gamePanel
     StartPanel startPanel; // Displays manual and auto game choices
     AutoMenuPanel autoMenuPanel; // Auto game menu panel displayed below gamePanel
@@ -27,7 +27,7 @@ public class CadeNomesApp extends JFrame {
 
         gameMenuPanel = new GameMenuPanel(new MenuButtonActionListener(), this.getWidth());
         scorePanel = new ScorePanel(this.getWidth());
-        gamePanel = new GamePanel(this.getWidth(), this.getHeight());
+        manualGamePanel = new ManualGamePanel(this.getWidth(), this.getHeight());
 
 
         gameOverLabel = new JLabel("");
@@ -35,7 +35,7 @@ public class CadeNomesApp extends JFrame {
         autoMenuPanel = new AutoMenuPanel(new MenuButtonActionListener(), this.getWidth());
 
 
-        add(gamePanel);
+        add(manualGamePanel);
         add(scorePanel, BorderLayout.NORTH);
         add(gameMenuPanel, BorderLayout.SOUTH);
         add(autoMenuPanel, BorderLayout.SOUTH);
@@ -68,7 +68,7 @@ public class CadeNomesApp extends JFrame {
             gameMenuPanel.setVisible(gameReveal);
         }
 
-        gamePanel.setVisible(gameReveal);
+        manualGamePanel.setVisible(gameReveal);
         if (gameReveal) {
             gameOverLabel.setText("");
         }
@@ -89,30 +89,30 @@ public class CadeNomesApp extends JFrame {
             if (command.equalsIgnoreCase("  ")) {
                 gameMenuPanel.switchFirstColor();
             } else if (command.equalsIgnoreCase("Turn Red")) {
-                gamePanel.changeColor(Colors.RED_COVER);
+                manualGamePanel.changeColor(Colors.RED_COVER);
             } else if (command.equalsIgnoreCase("Turn Blue")) {
-                gamePanel.changeColor(Colors.BLUE_COVER);
+                manualGamePanel.changeColor(Colors.BLUE_COVER);
             } else if (command.equalsIgnoreCase("Turn Neutral")) {
-                gamePanel.changeColor(Colors.NEUTRAL_COVER);
+                manualGamePanel.changeColor(Colors.NEUTRAL_COVER);
             } else if (command.equalsIgnoreCase("Turn Black")) {
-                gamePanel.changeColor(Colors.BLACK_COVER);
+                manualGamePanel.changeColor(Colors.BLACK_COVER);
             } else if (command.equalsIgnoreCase("Load New Word list")) {
-                gamePanel.loadWords();
+                manualGamePanel.addWordsToTiles();
             } else if (command.equalsIgnoreCase("Reset Board")) {
-                gamePanel.resetBoard();
+                manualGamePanel.resetBoard();
             } else if (command.equalsIgnoreCase("Switch View")) {
-                gamePanel.setMasterView();
+                manualGamePanel.setMasterView();
             } else if (command.equalsIgnoreCase("Quit")) {
-                gamePanel.resetBoard();
+                manualGamePanel.resetBoard();
                 revealGame(false, true);
             }
-            String gameOver = gamePanel.isGameOver();
+            String gameOver = manualGamePanel.isGameOver();
             if (!gameOver.equals("")) {
                 gameOverLabel.setText(gameOver);
                 revealGame(false, true);
 
             }
-            gamePanel.repaint();
+            manualGamePanel.repaint();
         }
     }
 

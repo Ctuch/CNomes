@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Creates and manages the board game tiles
  */
-public class GamePanel extends JPanel {
+public class ManualGamePanel extends JPanel {
 
     private final static int C_HEIGHT = 50;
     private final static int C_WIDTH = 100;
@@ -39,15 +39,17 @@ public class GamePanel extends JPanel {
      * @param width width for the game panel
      * @param height height for the game panel
      */
-    public GamePanel(int width, int height) {
+    public ManualGamePanel(int width, int height) {
         // TODO: change height to 3/4 of the screen
         setPreferredSize(new Dimension(width, height));
         setBackground(Colors.GAME_PANEL);
+        setLayout(new GridBagLayout());
         locations = new ArrayList<>();
+        loadWords();
+        createBoard();
         selectedSquare = -1;
         reset = true;
         masterView = false;
-        loadWords();
         addMouseControl();
         redCount = 0;
         blueCount = 0;
@@ -55,6 +57,7 @@ public class GamePanel extends JPanel {
         ScorePanel.updateScore(redCount, blueCount);
     }
 
+    /*
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -64,19 +67,40 @@ public class GamePanel extends JPanel {
             drawBoard(g);
         }
     }
+    */
 
-    private void drawBoard(Graphics g) {
+    private void loadLocations() {
+        for (int i = 0; i < 25; i++) {
+            locations.add(new Location());
+        }
+    }
+
+    private void createBoard() {
+        loadLocations();
         // TODO: learn to play with fonts for graphics
-        g.setFont(g.getFont().deriveFont(Font.PLAIN, 12));
-        for (int i = 1; i <= 5; i++) {
-            for (int j = 1; j <= 5; j++) {
+        GridBagConstraints c = new GridBagConstraints();
+        Insets insets = new Insets(5, 5, 5, 5);
+        c.weightx = .5;
+        c.weighty = .5;
+        c.fill = GridBagConstraints.BOTH;
+        c.insets = insets;
+        for (int i = 0; i < locations.size(); i++) {
+            c.gridx = i % 5;
+            c.gridy = i / 5;
+            if (words != null) {
+                locations.get(i).setWord(words.get(i));
+            }
+            add(locations.get(i), c);
+        }
+        /*for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 int currentPos = getCurrentPos(i, j);
                 drawTile(i, j, g, currentPos);
                 if (!(words == null) && locations.get(currentPos).getCoverColor() == Colors.TILE) {
                     writeWord(words.get(currentPos), i, j, g);
                 }
             }
-        }
+        }*/
     }
 
     private void loadDefaultBoard(Graphics g) {
@@ -85,7 +109,7 @@ public class GamePanel extends JPanel {
         for (int i = 1; i <= 5; i++) {
             for (int j = 1; j <= 5; j++) {
                 int currentPos = getCurrentPos(i, j);
-                locations.add(new Location(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER));
+                //locations.add(new Location(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER));
                 drawTile(i, j, g, currentPos);
                 if (!(words == null)) {
                     writeWord(words.get(currentPos), i, j, g);
@@ -118,9 +142,10 @@ public class GamePanel extends JPanel {
     }
 
 
-    public void loadWords() {
+    private void loadWords() {
         try {
             WordList wordList = new WordList(false);
+            wordList.formatWords();
             words = wordList.getWords();
         } catch (IOException e) {
             System.out.println("I'm sorry please try again");
@@ -133,7 +158,7 @@ public class GamePanel extends JPanel {
             if (masterView) {
                 locations.get(selectedSquare).setMasterColor(masterVersionOfColor(color));
             } else {
-                locations.get(selectedSquare).setCoverColor(color);
+                locations.get(selectedSquare).setCoverColor(color, words.get(0).length());
             }
             updateCounts(color);
         }
@@ -177,7 +202,7 @@ public class GamePanel extends JPanel {
 
     private void updateSelectedCard(int x, int y) {
         for (int i = 0; i < locations.size(); i++) {
-            if (isInSpace(x, y, locations.get(i).getxPos(), locations.get(i).getyPos())) {
+            if (isInSpace(x, y, locations.get(i).getX(), locations.get(i).getY())) {
                 selectedSquare = i;
                 System.out.println("selected square is " + i);
                 return;
@@ -191,7 +216,7 @@ public class GamePanel extends JPanel {
     private boolean isInSpace(int mouseX, int mouseY, int locationX, int locationY) {
         int differenceX = mouseX - locationX;
         int differenceY = mouseY - locationY;
-        return differenceX <= C_WIDTH && differenceX >= 0 && differenceY <= C_HEIGHT && differenceY >= 0;
+        return differenceX <= locations.get(0).getWidth() && differenceX >= 0 && differenceY <= locations.get(0).getHeight() && differenceY >= 0;
     }
 
     public String isGameOver() {
@@ -226,11 +251,33 @@ public class GamePanel extends JPanel {
         ScorePanel.updateScore(redCount, blueCount);
         selectedSquare = -1;
         masterView = false;
-        locations.clear();
+        resetLocations();
         assassinTriggered = false;
+    }
+
+    private void resetLocations() {
+        loadWords();
+        for (int i = 0; i < locations.size(); i++) {
+            Location l = locations.get(i);
+            l.setMasterColor(Colors.NEUTRAL_MASTER);
+            l.setCoverColor(Colors.TILE, 0);
+            l.setText(words.get(i));
+        }
     }
 
     public void setMasterView() {
         this.masterView = !this.masterView;
+        for (Location l : locations) {
+            l.switchTileColor();
+        }
+    }
+
+    public void addWordsToTiles() {
+        loadWords();
+        for (int i = 0; i < locations.size(); i++) {
+            if (locations.get(i).getCoverColor().equals(Colors.TILE)) {
+                locations.get(i).setText(words.get(i));
+            }
+        }
     }
 }
