@@ -108,8 +108,14 @@ public class CadeNomesApp extends JFrame {
             }
             String gameOver = manualGamePanel.isGameOver();
             if (!gameOver.equals("")) {
-                gameOverLabel.setText(gameOver);
-                revealGame(false, true);
+                manualGamePanel.repaint();
+                Timer timer = new Timer(750, event -> {
+                    gameOverLabel.setText(gameOver);
+                    revealGame(false, true);
+                    manualGamePanel.resetBoard();
+                });
+                timer.setRepeats(false);
+                timer.start();
 
             }
             manualGamePanel.repaint();

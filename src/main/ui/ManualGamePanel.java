@@ -238,9 +238,6 @@ public class ManualGamePanel extends JPanel {
         if (assassinTriggered) {
             gameOverMessage = "You were killed by the assassin!";
         }
-        if (!gameOverMessage.equals("")) {
-            resetBoard();
-        }
         return gameOverMessage;
     }
 
