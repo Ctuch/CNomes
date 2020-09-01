@@ -15,19 +15,11 @@ import java.util.ArrayList;
  */
 public class ManualGamePanel extends JPanel {
 
-    private final static int C_HEIGHT = 50;
-    private final static int C_WIDTH = 100;
-    private final static int C_X_MULTIPLIER = C_WIDTH + 10; // distance between tiles horizontally
-    private final static int C_Y_MULTIPLIER = C_HEIGHT + 10; // distance between tiles vertically
-    private final static int TEXT_HORIZ_SPACE = C_WIDTH / 2; // text horizontal spacing
-    private final static int TEXT_VERT_SPACE = C_Y_MULTIPLIER / 2; // text vertical spacing
     private final static int MAX_TILES_FIRST = 9; // maximum team tiles
-
 
     private int selectedSquare; // most recent clicked on square by client
     private ArrayList<Location> locations; // list of tile locations on the board
 
-    private Boolean reset; // determines whether board is reset
     private Boolean masterView; // determines whether the spy master view is displayed
     private ArrayList<String> words; // words displayed on tiles
     private int redCount; // red tiles revealed
@@ -48,26 +40,13 @@ public class ManualGamePanel extends JPanel {
         loadWords();
         createBoard();
         selectedSquare = -1;
-        reset = true;
         masterView = false;
         addMouseControl();
         redCount = 0;
         blueCount = 0;
         assassinTriggered = false;
-        ScorePanel.updateScore(redCount, blueCount);
+        ScorePanel.updateScore(true, redCount, blueCount);
     }
-
-    /*
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if (reset) {
-            loadDefaultBoard(g);
-        } else {
-            drawBoard(g);
-        }
-    }
-    */
 
     private void loadLocations() {
         for (int i = 0; i < 25; i++) {
@@ -92,55 +71,7 @@ public class ManualGamePanel extends JPanel {
             }
             add(locations.get(i), c);
         }
-        /*for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                int currentPos = getCurrentPos(i, j);
-                drawTile(i, j, g, currentPos);
-                if (!(words == null) && locations.get(currentPos).getCoverColor() == Colors.TILE) {
-                    writeWord(words.get(currentPos), i, j, g);
-                }
-            }
-        }*/
     }
-
-    private void loadDefaultBoard(Graphics g) {
-        g.setFont(g.getFont().deriveFont(Font.PLAIN, 12));
-        locations.clear();
-        for (int i = 1; i <= 5; i++) {
-            for (int j = 1; j <= 5; j++) {
-                int currentPos = getCurrentPos(i, j);
-                //locations.add(new Location(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER));
-                drawTile(i, j, g, currentPos);
-                if (!(words == null)) {
-                    writeWord(words.get(currentPos), i, j, g);
-                }
-            }
-        }
-        reset = false;
-        // TODO: bug?
-        masterView = false;
-    }
-
-    private int getCurrentPos(int i, int j) {
-        return (i - 1) * 5 + j - 1;
-    }
-
-    private void drawTile(int i, int j, Graphics g, int currentPos) {
-        if (masterView) {
-            g.setColor(locations.get(currentPos).getMasterColor());
-        } else {
-            g.setColor(locations.get(currentPos).getCoverColor());
-        }
-        g.fillRect(i * C_X_MULTIPLIER, j * C_Y_MULTIPLIER, C_WIDTH, C_HEIGHT);
-    }
-
-    private void writeWord(String word, int i, int j, Graphics g) {
-        g.setColor(Colors.TEXT);
-        //TODO: fix centering of words
-        g.drawString(word, i * C_X_MULTIPLIER + TEXT_HORIZ_SPACE - word.length() * 4,
-                j * C_Y_MULTIPLIER + TEXT_VERT_SPACE);
-    }
-
 
     private void loadWords() {
         try {
@@ -180,10 +111,10 @@ public class ManualGamePanel extends JPanel {
         if (!masterView) {
             if (color.equals(Colors.RED_COVER)) {
                 redCount++;
-                ScorePanel.updateScore(redCount, blueCount);
+                ScorePanel.updateScore(true, redCount, blueCount);
             } else if (color.equals(Colors.BLUE_COVER)) {
                 blueCount++;
-                ScorePanel.updateScore(redCount, blueCount);
+                ScorePanel.updateScore(true, redCount, blueCount);
             } else if (color.equals(Colors.BLACK_COVER)) {
                 assassinTriggered = true;
             }
@@ -204,11 +135,9 @@ public class ManualGamePanel extends JPanel {
         for (int i = 0; i < locations.size(); i++) {
             if (isInSpace(x, y, locations.get(i).getX(), locations.get(i).getY())) {
                 selectedSquare = i;
-                System.out.println("selected square is " + i);
                 return;
             }
         }
-        System.out.println("No square selected");
         selectedSquare = -1;
     }
 
@@ -242,10 +171,9 @@ public class ManualGamePanel extends JPanel {
     }
 
     public void resetBoard() {
-        reset = true;
         redCount = 0;
         blueCount = 0;
-        ScorePanel.updateScore(redCount, blueCount);
+        ScorePanel.updateScore(true, redCount, blueCount);
         selectedSquare = -1;
         masterView = false;
         resetLocations();

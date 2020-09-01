@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class AutoMenuPanel extends MenuPanel {
 
     private static boolean redFirst; // determines if red team goes first
+    private static JLabel colorLabel;
 
     /**
      * creates the meny for the automatic version
@@ -21,14 +22,14 @@ public class AutoMenuPanel extends MenuPanel {
         setPreferredSize(new Dimension(width, 200));
         setLayout(new GridLayout(1, 0, 10, 5));
         setBackground(Colors.MENU_PANEL);
-        createMenuLabel("Menu");
+        add(createMenuLabel("Menu"));
         createColorLabel();
         createMenuButtons(listener);
         redFirst = true;
     }
 
     private void createColorLabel() {
-        JLabel colorLabel = new JLabel();
+        colorLabel = new JLabel();
         if (redFirst) {
             colorLabel.setBackground(Colors.RED_COVER);
         } else {
@@ -56,5 +57,18 @@ public class AutoMenuPanel extends MenuPanel {
      */
     public static void setRedFirst(boolean redFirst) {
         AutoMenuPanel.redFirst = redFirst;
+        if (redFirst) {
+            colorLabel.setBackground(Colors.RED_COVER);
+        } else {
+            colorLabel.setBackground(Colors.BLUE_COVER);
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static boolean isRedFirst() {
+        return redFirst;
     }
 }

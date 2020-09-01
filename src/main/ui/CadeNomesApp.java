@@ -14,6 +14,7 @@ public class CadeNomesApp extends JFrame {
     GameMenuPanel gameMenuPanel; // Manual game menu panel displayed below gamePanel
     StartPanel startPanel; // Displays manual and auto game choices
     AutoMenuPanel autoMenuPanel; // Auto game menu panel displayed below gamePanel
+    AutoGamePanel autoGamePanel; // Auto game panel that displays word tiles
     ScorePanel scorePanel; //Displays game score
     JLabel gameOverLabel; // End game description on startPanel
 
@@ -28,11 +29,12 @@ public class CadeNomesApp extends JFrame {
         gameMenuPanel = new GameMenuPanel(new MenuButtonActionListener(), this.getWidth());
         scorePanel = new ScorePanel(this.getWidth());
         manualGamePanel = new ManualGamePanel(this.getWidth(), this.getHeight());
-
+        autoMenuPanel = new AutoMenuPanel(new AutoMenuButtonActionListener(), this.getWidth());
+        autoGamePanel = new AutoGamePanel(this.getWidth(), this.getHeight());
 
         gameOverLabel = new JLabel("");
         startPanel = new StartPanel(new StartButtonActionListener(), this.getWidth(), this.getHeight(), gameOverLabel);
-        autoMenuPanel = new AutoMenuPanel(new MenuButtonActionListener(), this.getWidth());
+
 
 
         add(manualGamePanel);
@@ -56,19 +58,26 @@ public class CadeNomesApp extends JFrame {
         startPanel.setVisible(!gameReveal);
         scorePanel.setVisible(gameReveal);
         if (isAuto && gameReveal) {
+            remove(manualGamePanel);
             remove(gameMenuPanel);
+            add(autoGamePanel);
             add(autoMenuPanel, BorderLayout.SOUTH);
+            autoGamePanel.setVisible(gameReveal);
             autoMenuPanel.setVisible(gameReveal);
         } else if (gameReveal) {
             remove(autoMenuPanel);
+            remove(autoGamePanel);
+            add(manualGamePanel);
             add(gameMenuPanel, BorderLayout.SOUTH);
             gameMenuPanel.setVisible(gameReveal);
+            manualGamePanel.setVisible(gameReveal);
         } else {
             autoMenuPanel.setVisible(gameReveal);
             gameMenuPanel.setVisible(gameReveal);
+            autoGamePanel.setVisible(gameReveal);
+            manualGamePanel.setVisible(gameReveal);
         }
 
-        manualGamePanel.setVisible(gameReveal);
         if (gameReveal) {
             gameOverLabel.setText("");
         }
@@ -108,7 +117,6 @@ public class CadeNomesApp extends JFrame {
             }
             String gameOver = manualGamePanel.isGameOver();
             if (!gameOver.equals("")) {
-                manualGamePanel.repaint();
                 Timer timer = new Timer(750, event -> {
                     gameOverLabel.setText(gameOver);
                     revealGame(false, true);
@@ -119,6 +127,30 @@ public class CadeNomesApp extends JFrame {
 
             }
             manualGamePanel.repaint();
+        }
+    }
+
+    private class AutoMenuButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String command = e.getActionCommand();
+            if (command.equalsIgnoreCase("Switch View")) {
+                autoGamePanel.setMasterView();
+            } else if (command.equalsIgnoreCase("Quit")) {
+                autoGamePanel.resetBoard();
+                revealGame(false, true);
+            }
+            String gameOver = autoGamePanel.isGameOver();
+            if (!gameOver.equals("")) {
+                Timer timer = new Timer(750, event -> {
+                    gameOverLabel.setText(gameOver);
+                    revealGame(false, true);
+                    autoGamePanel.resetBoard();
+                });
+                timer.setRepeats(false);
+                timer.start();
+
+            }
         }
     }
 

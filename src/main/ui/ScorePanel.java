@@ -48,8 +48,12 @@ public class ScorePanel extends JPanel {
      * @param red New score for red team
      * @param blue New score for blue team
      */
-    public static void updateScore(int red, int blue) {
-        if (GameMenuPanel.isRedFirst()) {
+    public static void updateScore(boolean isManualGame, int red, int blue) {
+        boolean isRedMax = false;
+        if (isManualGame && GameMenuPanel.isRedFirst() || !isManualGame && AutoMenuPanel.isRedFirst()) {
+            isRedMax = true;
+        }
+        if (isRedMax) {
             red = 9 - red;
             blue = 8 - blue;
         } else {

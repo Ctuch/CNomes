@@ -1,5 +1,6 @@
 package main.model;
 
+import main.ui.AutoMenuPanel;
 import main.ui.Colors;
 import java.awt.*;
 import java.io.IOException;
@@ -47,6 +48,7 @@ public class Board {
      *  generates a new configuration of tiles
      */
     public void loadNewBoard() {
+        selectNewWords();
         tiles = loadRandomTileSet();
     }
 
@@ -58,6 +60,7 @@ public class Board {
     private ArrayList<Location> loadRandomTileSet() {
         ArrayList<Location> locations = new ArrayList<>();
         boolean redFirst = random.nextBoolean();
+        AutoMenuPanel.setRedFirst(redFirst);
 
         ArrayList<Integer> availableTiles = new ArrayList<>();
         for (int i = 0; i < 25; i++) {

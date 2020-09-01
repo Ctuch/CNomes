@@ -9,12 +9,8 @@ public class Location extends JLabel {
 
     private Color coverColor;
     private Color masterColor;
-    //private int xPos;
-    //private int yPos;
 
     public Location() {
-        //this.xPos = xPos;
-        //this.yPos = yPos;
         coverColor = Colors.TILE;
         init();
     }
@@ -28,24 +24,6 @@ public class Location extends JLabel {
         setBackground(coverColor);
         masterColor = Colors.NEUTRAL_MASTER;
     }
-
-    public Location(Color coverColor) {
-        this.coverColor = coverColor;
-        init();
-    }
-
-    /*public void setPos(int xPos, int yPos) {
-        this.xPos = xPos;
-        this.yPos = yPos;
-    }*/
-
-    /*public int getxPos() {
-        return xPos;
-    }*/
-
-    /*public int getyPos() {
-        return yPos;
-    }*/
 
     public Color getCoverColor() {
         return coverColor;

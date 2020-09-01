@@ -12,13 +12,13 @@ public abstract class MenuPanel extends JPanel{
 
     //MODIFIES: this
     //EFFECTS: creates a menu label with text to display on the panel
-    protected void createMenuLabel(String text) {
+    protected JLabel createMenuLabel(String text) {
         JLabel mainMenu = new JLabel(text);
         mainMenu.setPreferredSize(new Dimension(800,
                 100));
         mainMenu.setForeground(Colors.MENU_TEXT);
         mainMenu.setHorizontalAlignment(JLabel.CENTER);
-        add(mainMenu);
+        return mainMenu;
     }
 
     //MODIFIES: this
@@ -26,6 +26,18 @@ public abstract class MenuPanel extends JPanel{
     protected void createMenuButtons(ArrayList<JButton> buttons) {
         for (JButton button : buttons) {
             add(button);
+        }
+    }
+
+    //MODIFIES: this
+    //EFFECTS: adds buttons to this in a single column with label above
+    protected void createMenuButtons(ArrayList<JButton> buttons, GridBagConstraints constraints) {
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+
+        for (JButton button : buttons) {
+            add(button, constraints);
+            constraints.gridy++;
         }
     }
 
