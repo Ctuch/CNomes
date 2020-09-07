@@ -19,13 +19,39 @@ public class StartPanel extends MenuPanel {
      */
     public StartPanel(ActionListener listener, int width, int height, JLabel gameOverMessage) {
         setPreferredSize(new Dimension(width, height));
-        setLayout(new GridLayout(0, 1, 10, 5));
+        setLayout(new GridBagLayout());
         setBackground(Colors.START_PANEL);
-        createMenuLabel("Start Menu");
+        JLabel text = createMenuLabel("Start Menu");
+        addLabelConstraints(text);
+        createMenuButtons(listener);
+        addGameOver(gameOverMessage);
+    }
+
+    private void addGameOver(JLabel gameOverMessage) {
         gameOverMessage.setHorizontalAlignment(JLabel.CENTER);
         gameOverMessage.setForeground(Colors.MENU_TEXT);
-        createMenuButtons(listener);
-        add(gameOverMessage);
+        GridBagConstraints c = new GridBagConstraints();
+        Insets insets = new Insets(5, 5, 5, 5);
+        c.weightx = .5;
+        c.weighty = .5;
+        c.fill = GridBagConstraints.BOTH;
+        c.insets = insets;
+        c.gridx = 0;
+        c.gridy = 3;
+        add(gameOverMessage, c);
+    }
+
+    private void addLabelConstraints(JLabel text) {
+        text.setFont(new Font(text.getFont().getName(), Font.PLAIN, 50));
+        GridBagConstraints c = new GridBagConstraints();
+        Insets insets = new Insets(5, 5, 5, 5);
+        c.weightx = .7;
+        c.weighty = .7;
+        c.fill = GridBagConstraints.BOTH;
+        c.insets = insets;
+        c.gridx = 0;
+        c.gridy = 0;
+        add(text, c);
     }
 
     // adds buttons to listener and creates them
@@ -36,8 +62,15 @@ public class StartPanel extends MenuPanel {
         startButtons.add(addButton);
         startButtons.add(moveButton);
 
+        GridBagConstraints c = new GridBagConstraints();
+        Insets insets = new Insets(10, 75, 10, 75);
+        c.weightx = .5;
+        c.weighty = .5;
+        c.fill = GridBagConstraints.BOTH;
+        c.insets = insets;
+
         addActionListener(startButtons, listener);
 
-        createMenuButtons(startButtons);
+        createMenuButtons(startButtons, c);
     }
 }

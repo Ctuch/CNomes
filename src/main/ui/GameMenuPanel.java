@@ -23,7 +23,7 @@ public class GameMenuPanel extends MenuPanel {
         setPreferredSize(new Dimension(width, HEIGHT));
         setLayout(new GridLayout(2, 0, 10, 5));
         setBackground(Colors.MENU_PANEL);
-        createMenuLabel("Menu");
+        add(createMenuLabel("Menu"));
         createMenuButtons(listener);
         redFirst = true;
     }

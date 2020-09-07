@@ -10,10 +10,12 @@ import java.awt.event.ActionListener;
  */
 public class CadeNomesApp extends JFrame {
 
-    GamePanel gamePanel; // Displays word tiles
+    ManualGamePanel manualGamePanel; // Displays word tiles
     GameMenuPanel gameMenuPanel; // Manual game menu panel displayed below gamePanel
     StartPanel startPanel; // Displays manual and auto game choices
     AutoMenuPanel autoMenuPanel; // Auto game menu panel displayed below gamePanel
+    AutoGamePanel autoGamePanel; // Auto game panel that displays word tiles
+    ScorePanel scorePanel; //Displays game score
     JLabel gameOverLabel; // End game description on startPanel
 
     /**
@@ -23,14 +25,20 @@ public class CadeNomesApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(800, 650));
-        gamePanel = new GamePanel(this.getWidth(), this.getHeight());
+
         gameMenuPanel = new GameMenuPanel(new MenuButtonActionListener(), this.getWidth());
+        scorePanel = new ScorePanel(this.getWidth());
+        manualGamePanel = new ManualGamePanel(this.getWidth(), this.getHeight());
+        autoMenuPanel = new AutoMenuPanel(new AutoMenuButtonActionListener(), this.getWidth());
+        autoGamePanel = new AutoGamePanel(this.getWidth(), this.getHeight());
 
         gameOverLabel = new JLabel("");
         startPanel = new StartPanel(new StartButtonActionListener(), this.getWidth(), this.getHeight(), gameOverLabel);
-        autoMenuPanel = new AutoMenuPanel(new MenuButtonActionListener(), this.getWidth());
 
-        add(gamePanel);
+
+
+        add(manualGamePanel);
+        add(scorePanel, BorderLayout.NORTH);
         add(gameMenuPanel, BorderLayout.SOUTH);
         add(autoMenuPanel, BorderLayout.SOUTH);
         add(startPanel, BorderLayout.WEST);
@@ -48,20 +56,28 @@ public class CadeNomesApp extends JFrame {
     private void revealGame(boolean gameReveal, boolean isAuto) {
         //TODO: reveal auto vs. manual boards
         startPanel.setVisible(!gameReveal);
+        scorePanel.setVisible(gameReveal);
         if (isAuto && gameReveal) {
+            remove(manualGamePanel);
             remove(gameMenuPanel);
+            add(autoGamePanel);
             add(autoMenuPanel, BorderLayout.SOUTH);
+            autoGamePanel.setVisible(gameReveal);
             autoMenuPanel.setVisible(gameReveal);
         } else if (gameReveal) {
             remove(autoMenuPanel);
+            remove(autoGamePanel);
+            add(manualGamePanel);
             add(gameMenuPanel, BorderLayout.SOUTH);
             gameMenuPanel.setVisible(gameReveal);
+            manualGamePanel.setVisible(gameReveal);
         } else {
             autoMenuPanel.setVisible(gameReveal);
             gameMenuPanel.setVisible(gameReveal);
+            autoGamePanel.setVisible(gameReveal);
+            manualGamePanel.setVisible(gameReveal);
         }
 
-        gamePanel.setVisible(gameReveal);
         if (gameReveal) {
             gameOverLabel.setText("");
         }
@@ -82,30 +98,59 @@ public class CadeNomesApp extends JFrame {
             if (command.equalsIgnoreCase("  ")) {
                 gameMenuPanel.switchFirstColor();
             } else if (command.equalsIgnoreCase("Turn Red")) {
-                gamePanel.changeColor(Colors.RED_COVER);
+                manualGamePanel.changeColor(Colors.RED_COVER);
             } else if (command.equalsIgnoreCase("Turn Blue")) {
-                gamePanel.changeColor(Colors.BLUE_COVER);
+                manualGamePanel.changeColor(Colors.BLUE_COVER);
             } else if (command.equalsIgnoreCase("Turn Neutral")) {
-                gamePanel.changeColor(Colors.NEUTRAL_COVER);
+                manualGamePanel.changeColor(Colors.NEUTRAL_COVER);
             } else if (command.equalsIgnoreCase("Turn Black")) {
-                gamePanel.changeColor(Colors.BLACK_COVER);
+                manualGamePanel.changeColor(Colors.BLACK_COVER);
             } else if (command.equalsIgnoreCase("Load New Word list")) {
-                gamePanel.loadWords();
+                manualGamePanel.addWordsToTiles();
             } else if (command.equalsIgnoreCase("Reset Board")) {
-                gamePanel.resetBoard();
+                manualGamePanel.resetBoard();
             } else if (command.equalsIgnoreCase("Switch View")) {
-                gamePanel.setMasterView();
+                manualGamePanel.setMasterView();
             } else if (command.equalsIgnoreCase("Quit")) {
-                gamePanel.resetBoard();
+                manualGamePanel.resetBoard();
                 revealGame(false, true);
             }
-            String gameOver = gamePanel.isGameOver();
+            String gameOver = manualGamePanel.isGameOver();
             if (!gameOver.equals("")) {
-                gameOverLabel.setText(gameOver);
-                revealGame(false, true);
+                Timer timer = new Timer(750, event -> {
+                    gameOverLabel.setText(gameOver);
+                    revealGame(false, true);
+                    manualGamePanel.resetBoard();
+                });
+                timer.setRepeats(false);
+                timer.start();
 
             }
-            gamePanel.repaint();
+            manualGamePanel.repaint();
+        }
+    }
+
+    private class AutoMenuButtonActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String command = e.getActionCommand();
+            if (command.equalsIgnoreCase("Switch View")) {
+                autoGamePanel.setMasterView();
+            } else if (command.equalsIgnoreCase("Quit")) {
+                autoGamePanel.resetBoard();
+                revealGame(false, true);
+            }
+            String gameOver = autoGamePanel.isGameOver();
+            if (!gameOver.equals("")) {
+                Timer timer = new Timer(750, event -> {
+                    gameOverLabel.setText(gameOver);
+                    revealGame(false, true);
+                    autoGamePanel.resetBoard();
+                });
+                timer.setRepeats(false);
+                timer.start();
+
+            }
         }
     }
 
