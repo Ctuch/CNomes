@@ -62,20 +62,20 @@ public class CadeNomesApp extends JFrame {
             remove(gameMenuPanel);
             add(autoGamePanel);
             add(autoMenuPanel, BorderLayout.SOUTH);
-            autoGamePanel.setVisible(gameReveal);
-            autoMenuPanel.setVisible(gameReveal);
+            autoGamePanel.setVisible(true);
+            autoMenuPanel.setVisible(true);
         } else if (gameReveal) {
             remove(autoMenuPanel);
             remove(autoGamePanel);
             add(manualGamePanel);
             add(gameMenuPanel, BorderLayout.SOUTH);
-            gameMenuPanel.setVisible(gameReveal);
-            manualGamePanel.setVisible(gameReveal);
+            gameMenuPanel.setVisible(true);
+            manualGamePanel.setVisible(true);
         } else {
-            autoMenuPanel.setVisible(gameReveal);
-            gameMenuPanel.setVisible(gameReveal);
-            autoGamePanel.setVisible(gameReveal);
-            manualGamePanel.setVisible(gameReveal);
+            autoMenuPanel.setVisible(false);
+            gameMenuPanel.setVisible(false);
+            autoGamePanel.setVisible(false);
+            manualGamePanel.setVisible(false);
         }
 
         if (gameReveal) {
@@ -119,7 +119,7 @@ public class CadeNomesApp extends JFrame {
             if (!gameOver.equals("")) {
                 Timer timer = new Timer(750, event -> {
                     gameOverLabel.setText(gameOver);
-                    revealGame(false, true);
+                    revealGame(false, false);
                     manualGamePanel.resetBoard();
                 });
                 timer.setRepeats(false);

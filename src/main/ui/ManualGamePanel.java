@@ -87,7 +87,7 @@ public class ManualGamePanel extends JPanel {
     public void changeColor(Color color) {
         if (selectedSquare != -1) {
             if (masterView) {
-                locations.get(selectedSquare).setMasterColor(masterVersionOfColor(color));
+                locations.get(selectedSquare).setMasterColor(masterVersionOfColor(color), true);
             } else {
                 locations.get(selectedSquare).setCoverColor(color, words.get(0).length());
             }
@@ -184,7 +184,7 @@ public class ManualGamePanel extends JPanel {
         loadWords();
         for (int i = 0; i < locations.size(); i++) {
             Location l = locations.get(i);
-            l.setMasterColor(Colors.NEUTRAL_MASTER);
+            l.setMasterColor(Colors.NEUTRAL_MASTER, true);
             l.setCoverColor(Colors.TILE, 0);
             l.setText(words.get(i));
         }

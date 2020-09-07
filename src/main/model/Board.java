@@ -79,14 +79,14 @@ public class Board {
                 assignColor(Colors.BLUE_MASTER, locations, availableTiles);
             }
         }
-        locations.get(availableTiles.get(0)).setMasterColor(Colors.BLACK_MASTER);
+        locations.get(availableTiles.get(0)).setMasterColor(Colors.BLACK_MASTER, false);
         return locations;
     }
 
     private void assignColor(Color color, ArrayList<Location> locations, ArrayList<Integer> availableTiles) {
         int tileIndex = random.nextInt(availableTiles.size());
         int tile = availableTiles.get(tileIndex);
-        locations.get(tile).setMasterColor(color);
+        locations.get(tile).setMasterColor(color, false);
         availableTiles.remove(tileIndex);
     }
 

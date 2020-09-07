@@ -43,9 +43,11 @@ public class Location extends JLabel {
         return masterColor;
     }
 
-    public void setMasterColor(Color masterColor) {
+    public void setMasterColor(Color masterColor, boolean needsBackground) {
         this.masterColor = masterColor;
-        setBackground(masterColor);
+        if (needsBackground) {
+            setBackground(masterColor);
+        }
     }
 
     public void switchTileColor() {

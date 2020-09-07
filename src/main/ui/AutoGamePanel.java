@@ -66,17 +66,38 @@ public class AutoGamePanel extends JPanel {
     }
 
     private void changeColor(int index) {
-        //TODO: implement!
+        Location tile = board.getTiles().get(index);
+        if (!masterView)
+        {
+            tile.setCoverColor(coverVersionOfColor(tile.getMasterColor()), board.getWords().get(0).length());
+        }
+        updateCount(tile.getCoverColor());
     }
 
-    private Color coverVersionOfColor() {
-        //TODO: implement!
-        return null;
+    private Color coverVersionOfColor(Color color) {
+        if (color.equals(Colors.RED_MASTER)) {
+            return Colors.RED_COVER;
+        } else if (color.equals(Colors.BLUE_MASTER)) {
+            return Colors.BLUE_COVER;
+        } else if (color.equals(Colors.NEUTRAL_MASTER)) {
+            return Colors.NEUTRAL_COVER;
+        } else {
+            return Colors.BLACK_COVER;
+        }
     }
 
     private void updateCount(Color color) {
-        //TODO: implement!
-        ScorePanel.updateScore(false, redCount, blueCount);
+        if (!masterView) {
+            if (color.equals(Colors.RED_COVER)) {
+                redCount++;
+                ScorePanel.updateScore(false, redCount, blueCount);
+            } else if (color.equals(Colors.BLUE_COVER)) {
+                blueCount++;
+                ScorePanel.updateScore(false, redCount, blueCount);
+            } else if (color.equals(Colors.BLACK_COVER)) {
+                assassinTriggered = true;
+            }
+        }
     }
 
     private void updateSelectedCard(int x, int y) {
